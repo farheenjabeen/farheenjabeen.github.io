@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Farheen Ramzan — PhD Graduate, University of Sheffield. Generative &amp; Multimodal AI for Medical Imaging. Best Paper Award AIiH 2025. Commonwealth Scholar."/>
+<meta property="og:title" content="Farheen Ramzan — AI for Cardiac Imaging"/>
+<title>Farheen Ramzan — AI for Cardiac Imaging</title>
+<meta name="theme-color" content="#FFFFFF"/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=Lora:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ─── Reset ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:54px}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* ─── Design system ─── */
+:root{
+  /* Colours — disciplined use */
+  --ink:     #0D0D0D;   /* headings, important text */
+  --body:    #363636;   /* body text */
+  --muted:   #717171;   /* secondary text */
+  --faint:   #A8A8A8;   /* labels, meta */
+  --white:   #FFFFFF;
+  --off:     #F5F4F0;   /* tinted section bg */
+  --line:    #E6E4DE;   /* dividers */
+  --line2:   #D4D2CB;   /* stronger dividers */
+
+  /* ONE accent — used sparingly */
+  --accent:  #A06810;   /* gold — reserved for awards, CTAs, active states ONLY */
+  --accent-s:#FBF6EC;   /* accent surface */
+  --accent-b:rgba(160,104,16,0.18); /* accent border */
+
+  /* Second colour — for type tags only */
+  --navy:    #1D2E4F;
+  --navy-s:  #ECF0F8;
+  --navy-b:  rgba(29,46,79,0.15);
+
+  /* Typography — clean 6-stop scale */
+  --f-xs:  0.6875rem; /* 11px */
+  --f-sm:  0.8125rem; /* 13px */
+  --f-md:  0.9375rem; /* 15px */
+  --f-lg:  1.0625rem; /* 17px */
+  --f-xl:  1.375rem;  /* 22px */
+  --f-2xl: 1.875rem;  /* 30px */
+  --f-3xl: 3rem;      /* 48px */
+
+  --sans:  'Plus Jakarta Sans', system-ui, sans-serif;
+  --serif: 'Lora', Georgia, serif;
+  --mono:  'JetBrains Mono', monospace;
+
+  /* Layout */
+  --max:     960px;
+  --gutter:  clamp(1.25rem, 4vw, 2.75rem);
+
+  /* Spacing scale */
+  --s1: 0.5rem;
+  --s2: 1rem;
+  --s3: 1.5rem;
+  --s4: 2rem;
+  --s5: 3rem;
+  --s6: 4.5rem;
+}
+
+body{
+  font-family:var(--sans);
+  font-size:var(--f-md);
+  line-height:1.7;
+  color:var(--body);
+  background:var(--white);
+  overflow-x:hidden;
+}
+
+/* ─── Reveal ─── */
+.rev{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.rev.in{opacity:1;transform:none}
+.rev.d1{transition-delay:.09s}
+.rev.d2{transition-delay:.19s}
+.rev.d3{transition-delay:.31s}
+
+/* ═══════════════════════════════
+   NAV
+═══════════════════════════════ */
+.nav{
+  position:sticky;top:0;z-index:200;
+  height:54px;
+  display:flex;align-items:center;
+  padding:0 var(--gutter);
+  background:rgba(255,255,255,0.97);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav-name{
+  font-size:var(--f-sm);font-weight:700;
+  color:var(--ink);letter-spacing:-0.01em;flex-shrink:0;
+}
+.nav-links{
+  display:flex;list-style:none;
+  flex:1;justify-content:center;gap:0;
+}
+.nav-links a{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.07em;text-transform:uppercase;
+  color:var(--muted);
+  padding:0 0.85rem;height:54px;
+  display:flex;align-items:center;
+  border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s;
+  white-space:nowrap;
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.on{color:var(--ink);border-bottom-color:var(--accent)}
+.nav-cv{
+  flex-shrink:0;
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.07em;text-transform:uppercase;
+  background:var(--ink);color:var(--white);
+  padding:8px 18px;transition:background .15s;
+  white-space:nowrap;
+}
+.nav-cv:hover{background:#2a2a2a}
+/* Burger */
+.nav-burger{
+  display:none;flex-shrink:0;
+  background:none;border:none;cursor:pointer;
+  padding:6px;color:var(--ink);margin-left:var(--s2);
+}
+.nav-burger svg{display:block;width:22px;height:22px}
+/* Drawer */
+.drawer{
+  display:none;
+  position:fixed;top:54px;left:0;right:0;bottom:0;
+  background:var(--white);z-index:199;
+  flex-direction:column;
+  padding:var(--s3) var(--gutter);
+  border-top:1px solid var(--line);
+  overflow-y:auto;
+}
+.drawer.open{display:flex}
+.drawer a{
+  font-family:var(--mono);font-size:var(--f-sm);
+  letter-spacing:0.07em;text-transform:uppercase;
+  color:var(--body);padding:var(--s2) 0;
+  border-bottom:1px solid var(--line);
+}
+.drawer a:last-child{border-bottom:none}
+.drawer .d-cta{
+  margin-top:var(--s3);
+  background:var(--ink);color:var(--white);
+  padding:13px var(--s3);text-align:center;
+}
+
+/* ═══════════════════════════════
+   HERO
+═══════════════════════════════ */
+.hero{
+  max-width:calc(var(--max) + var(--gutter)*2);
+  margin:0 auto;
+  padding:var(--s5) var(--gutter) var(--s5);
+  display:grid;
+  grid-template-columns:1fr 170px;
+  gap:var(--s5);
+  align-items:start;
+}
+/* Meta line */
+.hero-meta{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:var(--s2);
+}
+/* Name — the single largest typographic element */
+.hero-name{
+  font-size:clamp(2.2rem,5.5vw,var(--f-3xl));
+  font-weight:700;color:var(--ink);
+  line-height:1.0;letter-spacing:-0.03em;
+  margin-bottom:var(--s1);
+}
+/* Italic subtitle — using serif for contrast */
+.hero-role{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1rem,2vw,1.35rem);
+  color:var(--muted);
+  margin-bottom:var(--s4);line-height:1.4;
+}
+/* Value prop — clear, concise, one sentence */
+.hero-prop{
+  font-size:var(--f-lg);font-weight:400;
+  color:var(--body);line-height:1.75;
+  max-width:540px;margin-bottom:var(--s4);
+  padding-left:var(--s3);
+  border-left:3px solid var(--ink);
+}
+.hero-prop strong{color:var(--ink);font-weight:600}
+/* Hook line — the impact statement above the pitch */
+.hero-hook{
+  font-size:clamp(1.45rem,3.2vw,2.15rem);
+  font-weight:700;color:var(--ink);
+  line-height:1.18;letter-spacing:-0.025em;
+  max-width:620px;margin-bottom:var(--s3);
+}
+.hero-hook em{
+  font-family:var(--serif);font-style:italic;
+  font-weight:400;color:var(--accent);
+}
+
+/* Awards — ONLY 2 get special treatment: Best Paper (accent) + Scholar (neutral) */
+.awards{display:flex;flex-direction:column;gap:6px;margin-bottom:var(--s4)}
+.award{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 14px;
+  background:var(--off);
+  border:1px solid var(--line);
+}
+.award.a-featured{
+  background:var(--accent-s);
+  border-color:var(--accent-b);
+}
+.award-icon{font-size:15px;flex-shrink:0;line-height:1.6}
+.award-title{
+  font-size:var(--f-sm);font-weight:700;
+  color:var(--ink);display:block;
+  margin-bottom:1px;line-height:1.4;
+}
+.award.a-featured .award-title{color:var(--accent)}
+.award-desc{font-size:var(--f-xs);color:var(--muted);line-height:1.5}
+
+/* Links row */
+.hero-links{
+  display:flex;flex-wrap:wrap;gap:var(--s2);
+  align-items:center;
+}
+.hl{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--muted);
+  display:flex;align-items:center;gap:4px;
+  padding-bottom:1px;border-bottom:1px solid var(--line);
+  transition:color .15s,border-color .15s;
+}
+.hl:hover{color:var(--ink);border-color:var(--line2)}
+
+/* Photo column */
+.hero-r{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+}
+.hero-photo{
+  width:185px;height:185px;
+  border-radius:50%;
+  border:2px solid var(--line);
+  background:var(--off);overflow:hidden;
+}
+.hero-photo img{
+  width:100%;height:100%;
+  object-fit:cover;border-radius:50%;
+}
+.photo-ph{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:3px;
+}
+.photo-ph span{
+  font-family:var(--mono);font-size:8.5px;
+  color:var(--faint);text-align:center;letter-spacing:.04em;
+  line-height:1.5;
+}
+.photo-ph span em{color:var(--accent);font-style:normal;display:block}
+/* Availability pill */
+.avail{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--accent);
+  border:1px solid var(--accent-b);
+  padding:5px 11px;
+  display:flex;align-items:center;gap:6px;
+  white-space:nowrap;
+}
+.avail-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);
+  animation:blink 2.4s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ═══════════════════════════════
+   SECTION FRAMEWORK
+═══════════════════════════════ */
+.section{
+  border-top:1px solid var(--line);
+  padding:var(--s5) var(--gutter);
+  scroll-margin-top:58px;
+}
+.section.tinted{background:var(--off)}
+.section.tight{padding-top:var(--s4);padding-bottom:var(--s4)}
+.section.tight{padding-top:var(--s5);padding-bottom:var(--s5)}
+.inner{max-width:var(--max);margin:0 auto}
+
+/* Section title — restrained, no eyebrow clutter */
+.s-title{
+  font-size:var(--f-xl);
+  font-weight:700;color:var(--ink);
+  letter-spacing:-0.02em;line-height:1.1;
+  margin-bottom:var(--s4);
+}
+.s-title-row{
+  display:flex;align-items:baseline;
+  justify-content:space-between;gap:var(--s3);
+  margin-bottom:var(--s4);
+}
+.s-title-row .s-title{margin-bottom:0}
+.s-more{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--accent);white-space:nowrap;
+  border-bottom:1px solid var(--accent-b);
+  transition:border-color .15s;
+}
+.s-more:hover{border-bottom-color:var(--accent)}
+
+/* ═══════════════════════════════
+   ABOUT
+═══════════════════════════════ */
+.about-cols{
+  display:grid;
+  grid-template-columns:1fr 270px;
+  gap:var(--s4);align-items:start;
+}
+.prose{font-size:var(--f-md);color:var(--body);line-height:1.75}
+.prose p{margin-bottom:var(--s2)}
+.prose p:last-child{margin-bottom:0}
+.prose a{color:var(--accent);border-bottom:1px solid var(--accent-b)}
+.prose strong{color:var(--ink);font-weight:600}
+
+.vision-box{
+  margin-top:var(--s3);
+  padding:var(--s3);
+  background:var(--accent-s);
+  border-left:2px solid var(--accent);
+}
+.vision-label{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--accent);display:block;margin-bottom:8px;
+}
+.vision-text{
+  font-family:var(--serif);font-style:italic;
+  font-size:var(--f-sm);color:var(--body);line-height:1.8;
+}
+
+/* Sidebar — reference panels, distinct from experience cards */
+.sidebar{display:flex;flex-direction:column;gap:var(--s3)}
+.sidebar > div{
+  background:var(--off);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:var(--s3);
+}
+.sb-heading{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--accent);display:block;
+  margin-bottom:12px;padding-bottom:9px;
+  border-bottom:1px solid var(--line2);
+  font-weight:500;
+}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.02em;
+  padding:4px 10px;border-radius:4px;
+  border:1px solid var(--line);
+  background:var(--white);
+  color:var(--body);
+  transition:all .15s;
+}
+.tag:hover{border-color:var(--accent-b);background:var(--accent-s);color:var(--ink)}
+
+.collab-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.collab{
+  padding:9px 0 9px 12px;
+  border-left:1px solid var(--line);
+  transition:border-left-color .15s;
+}
+.collab:hover{border-left-color:var(--line2)}
+.collab-name{font-size:var(--f-sm);font-weight:600;color:var(--ink);display:block;margin-bottom:1px}
+.collab-role{font-size:var(--f-xs);color:var(--muted)}
+.collab-statement{font-size:var(--f-sm);color:var(--body);line-height:1.6}
+.collab-statement strong{color:var(--ink);font-weight:600}
+
+/* Prior experience — scannable role cards in About */
+.xp-intro{font-size:var(--f-md);color:var(--body);line-height:1.75;margin-bottom:var(--s3)}
+.xp-intro strong{color:var(--ink);font-weight:600}
+.xp-grid{display:flex;flex-direction:column;gap:0;margin-bottom:var(--s3);border-top:1px solid var(--line)}
+.xp-card{
+  padding:var(--s3) 0;
+  border-bottom:1px solid var(--line);
+}
+.xp-card:hover{}
+.xp-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.xp-role{font-size:var(--f-md);font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+.xp-years{font-family:var(--mono);font-size:var(--f-xs);color:var(--faint);margin-left:auto}
+.xp-place{
+  font-family:var(--mono);font-size:var(--f-xs);letter-spacing:0.03em;
+  margin-bottom:10px;
+}
+.xp-place a{color:var(--accent);border-bottom:1px solid var(--accent-b);transition:border-color .15s}
+.xp-place a:hover{border-color:var(--accent)}
+.xp-desc{font-size:var(--f-sm);color:var(--body);line-height:1.65;margin-bottom:10px}
+.xp-desc strong{color:var(--ink);font-weight:600}
+.xp-chips{display:flex;flex-wrap:wrap;gap:5px}
+.xp-chip{
+  font-family:var(--mono);font-size:var(--f-xs);
+  padding:3px 9px;border:1px solid var(--line);
+  color:var(--muted);background:var(--off);
+}
+.xp-chip-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--faint);
+  align-self:center;margin-right:2px;
+}
+
+
+/* ═══════════════════════════════
+   PUBLICATIONS
+═══════════════════════════════ */
+.pub-list{border-top:1px solid var(--line)}
+.pub{
+  display:grid;grid-template-columns:280px 1fr;
+  border-bottom:1px solid var(--line);
+  transition:background .15s;
+  position:relative;
+}
+/* Only the accent bar — not full hover bg */
+.pub::before{
+  content:'';position:absolute;
+  left:0;top:0;bottom:0;width:0;
+  background:var(--accent);
+  transition:width .2s;
+}
+.pub:hover::before{width:2px}
+.pub-img{
+  width:280px;min-height:160px;
+  background:var(--ink);
+  border-right:1px solid var(--line);
+  overflow:hidden;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.pub-img:has(img){background:var(--white);padding:10px}
+.pub-img svg{width:100%;height:100%}
+.pub-img img{width:100%;height:100%;object-fit:contain}
+.pub-body{
+  padding:var(--s3) var(--s3) var(--s3) var(--s3);
+}
+.pub-meta{
+  display:flex;align-items:center;gap:7px;
+  flex-wrap:wrap;margin-bottom:5px;
+}
+.pub-venue{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+}
+/* Badges — ONLY 3 types */
+.badge{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:0.05em;text-transform:uppercase;
+  padding:2px 7px;font-weight:500;
+}
+.b-award{background:var(--accent-s);color:var(--accent);border:1px solid var(--accent-b)}
+.b-oral{background:#EBF5EF;color:#0B6040;border:1px solid rgba(11,96,64,0.18)}
+.b-cite{background:var(--navy-s);color:var(--navy);border:1px solid var(--navy-b)}
+.pub-title{
+  font-size:var(--f-sm);font-weight:600;
+  color:var(--ink);line-height:1.5;margin-bottom:5px;
+}
+/* Best Paper pub title gets accent */
+.pub.featured .pub-title{color:var(--accent)}
+.pub-authors{
+  font-family:var(--mono);font-size:9.5px;
+  color:var(--faint);margin-bottom:10px;line-height:1.6;
+}
+.pub-authors strong{color:var(--muted);font-weight:500}
+.pub-links{display:flex;gap:6px;flex-wrap:wrap}
+.plink{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.05em;text-transform:uppercase;
+  border:1px solid var(--line2);
+  color:var(--muted);padding:3px 10px;
+  transition:all .15s;
+}
+.plink:hover{border-color:var(--ink);color:var(--ink)}
+.plink-project{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.05em;text-transform:uppercase;
+  border:1px solid var(--accent-b);
+  background:var(--accent-s);color:var(--accent);
+  padding:3px 10px;font-weight:600;transition:all .15s;
+}
+.plink-project:hover{background:rgba(160,104,16,0.15);border-color:var(--accent)}
+
+/* Compact pub list */
+.pub-compact{margin-top:var(--s5);padding-top:var(--s5);border-top:2px solid var(--ink)}
+.pc-group{margin-bottom:var(--s4)}
+.pc-label{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--faint);display:block;
+  margin-bottom:9px;padding-bottom:7px;
+  border-bottom:1px solid var(--line);
+}
+.pc-list{list-style:none}
+.pc-item{
+  font-size:var(--f-sm);color:var(--body);
+  padding:8px 0;border-bottom:1px solid var(--line);
+  line-height:1.7;
+}
+.pc-item:last-child{border-bottom:none}
+.pc-item strong{color:var(--ink);font-weight:600}
+.pc-tag{
+  font-family:var(--mono);font-size:9px;
+  padding:1px 6px;margin-left:6px;
+  vertical-align:middle;
+  background:var(--accent-s);color:var(--accent);
+  border:1px solid var(--accent-b);
+}
+.pc-link{
+  font-family:var(--mono);font-size:9.5px;
+  color:var(--accent);margin-left:8px;
+  border-bottom:1px solid var(--accent-b);
+}
+
+/* ═══════════════════════════════
+   BACKGROUND — TIMELINE
+   Latest first, disciplined colours
+═══════════════════════════════ */
+.timeline{display:flex;flex-direction:column}
+.tl{
+  display:grid;
+  grid-template-columns:110px 16px 1fr;
+  gap:0 14px;
+  padding-bottom:var(--s4);
+}
+.tl:last-child{padding-bottom:0}
+.tl-yr{
+  font-family:var(--mono);font-size:10px;
+  color:var(--faint);letter-spacing:.04em;
+  padding-top:3px;text-align:right;
+  line-height:1.4;
+}
+.tl-spine{
+  display:flex;flex-direction:column;
+  align-items:center;
+}
+.tl-dot{
+  width:8px;height:8px;border-radius:50%;
+  border:1.5px solid var(--line2);background:var(--white);
+  flex-shrink:0;margin-top:4px;
+  transition:border-color .2s;
+}
+.tl:hover .tl-dot{border-color:var(--body)}
+/* Current — ONLY one entry gets accent */
+.tl-dot.now{
+  background:var(--accent);border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-s);
+}
+.tl-line{
+  flex:1;width:1px;background:var(--line);margin-top:4px;
+}
+.tl:last-child .tl-line{display:none}
+.tl-body{padding-top:1px}
+/* Type tag — only 3 types, muted colours */
+.tt{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:0.09em;text-transform:uppercase;
+  padding:1px 7px;margin-bottom:5px;
+  display:inline-block;
+}
+.tt-now{background:var(--accent);color:#fff}
+.tt-phd{background:var(--navy-s);color:var(--navy);border:1px solid var(--navy-b)}
+.tt-work{background:var(--off);color:var(--muted);border:1px solid var(--line2)}
+.tt-edu{background:var(--off);color:var(--faint);border:1px solid var(--line)}
+.tl-heading{
+  font-size:var(--f-sm);font-weight:700;
+  color:var(--ink);margin-bottom:2px;line-height:1.4;
+}
+.tl-detail{
+  font-size:11.5px;color:var(--muted);line-height:1.6;
+}
+.tl-detail strong{color:var(--body);font-weight:600}
+.tl-detail a{color:var(--accent);border-bottom:1px solid var(--accent-b)}
+
+/* ═══════════════════════════════
+   HONORS — hierarchy matters
+═══════════════════════════════ */
+/* Top 2 awards span full width or are larger */
+.honors-layout{display:flex;flex-direction:column;gap:1px;background:var(--line)}
+.honor-top{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--line);
+}
+.honor-rest{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--line);
+}
+.hcard{
+  background:var(--white);
+  padding:var(--s3);
+  border-top:2px solid transparent;
+  transition:border-top-color .2s,background .15s;
+}
+.hcard:hover{border-top-color:var(--line2);background:var(--off)}
+/* Featured card */
+.hcard.feat{
+  background:var(--accent-s);
+  border-top-color:var(--accent);
+}
+.hcard.feat:hover{background:#F6EDD8}
+.h-yr{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.07em;color:var(--faint);
+  display:block;margin-bottom:6px;
+}
+.hcard.feat .h-yr{color:var(--accent)}
+.h-title{
+  font-size:var(--f-sm);font-weight:700;
+  color:var(--ink);margin-bottom:4px;line-height:1.35;
+}
+.hcard.feat .h-title{font-size:var(--f-md)}
+.h-body{font-size:11.5px;color:var(--muted);line-height:1.6}
+.h-body a{color:var(--accent);border-bottom:1px solid var(--accent-b)}
+
+/* ═══════════════════════════════
+   PHOTOS
+═══════════════════════════════ */
+.photo-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  grid-auto-rows:215px;
+  gap:3px;
+}
+.ph-slot{
+  background:var(--off);border:1px solid var(--line);
+  overflow:hidden;position:relative;
+}
+.ph-slot:nth-child(1){grid-row:span 2}
+.ph-slot img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;display:block}
+.ph-slot:hover img{transform:scale(1.04)}
+.ph-ph{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:4px;padding:var(--s2);text-align:center;
+}
+.ph-ph-icon{font-size:1rem;opacity:.2}
+.ph-ph-text{font-family:var(--mono);font-size:9px;color:var(--faint);line-height:1.5;letter-spacing:.04em}
+.ph-ph-path{font-family:var(--mono);font-size:8.5px;color:var(--accent);opacity:.7;margin-top:3px}
+.ph-cap{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.6));
+  padding:1.2rem .8rem .65rem;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.05em;color:rgba(255,255,255,.8);
+  transform:translateY(3px);transition:transform .3s ease;
+}
+.ph-slot:hover .ph-cap{transform:translateY(0)}
+
+/* ═══════════════════════════════
+   NEWS
+═══════════════════════════════ */
+.news-feed{
+  display:flex;flex-direction:column;gap:0;
+  border:1px solid var(--line);
+  max-height:520px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--line2) transparent;
+}
+.nc{
+  background:var(--white);
+  padding:var(--s3) var(--s4);
+  border-bottom:1px solid var(--line);
+  transition:background .15s;
+}
+.nc:last-child{border-bottom:none}
+.nc:hover{background:var(--warm)}
+.nc-date{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);display:block;margin-bottom:6px;
+}
+.nc-text{font-size:var(--f-md);color:var(--body);line-height:1.65}
+.nc-text strong{color:var(--ink);font-weight:600}
+.nc-text a{color:var(--accent);border-bottom:1px solid var(--accent-b)}
+
+/* ═══════════════════════════════
+   TALKS + SERVICES
+═══════════════════════════════ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:var(--s6)}
+.col-title{font-size:var(--f-xl);font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:var(--s3)}
+.rlist{list-style:none}
+.ri{
+  font-size:var(--f-sm);color:var(--body);
+  padding:9px 0;border-bottom:1px solid var(--line);
+  display:flex;gap:var(--s2);align-items:baseline;
+  line-height:1.65;
+}
+.ri:first-child{border-top:none}
+.ri::before{
+  content:"→";color:var(--faint);flex-shrink:0;
+  font-family:var(--mono);font-size:10px;margin-top:2px;
+  transition:color .15s,transform .15s;
+}
+.ri:hover::before{color:var(--body);transform:translateX(3px)}
+.ri.dash::before{content:"—";color:var(--line2)}
+
+/* ═══════════════════════════════
+   CONTACT
+═══════════════════════════════ */
+.contact{
+  background:var(--ink);
+  padding:var(--s6) var(--gutter);
+}
+.contact-inner{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:var(--s4);align-items:start;
+}
+.contact-hl{
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  font-weight:700;color:var(--white);
+  line-height:1.1;letter-spacing:-.025em;
+  margin-bottom:var(--s2);
+}
+.contact-hl em{
+  font-family:var(--serif);
+  font-style:italic;font-weight:400;
+  color:var(--accent);
+}
+.contact-sub{
+  font-size:var(--f-sm);
+  color:rgba(255,255,255,.4);
+  line-height:1.8;margin-bottom:var(--s4);
+}
+.contact-cta{
+  display:inline-block;
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.08em;text-transform:uppercase;
+  border:1.5px solid var(--accent);color:var(--accent);
+  padding:10px 22px;transition:all .18s;
+}
+.contact-cta:hover{background:var(--accent);color:var(--ink)}
+.clinks{display:flex;flex-direction:column;gap:7px}
+.cli{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;
+  border:1px solid rgba(255,255,255,.07);
+  transition:border-color .15s,background .15s;
+  position:relative;
+}
+.cli::after{
+  content:"→";
+  font-family:var(--mono);font-size:10px;
+  color:rgba(255,255,255,.1);margin-left:auto;
+  transition:color .15s,transform .15s;
+}
+.cli:hover{border-color:rgba(160,104,16,.35);background:rgba(255,255,255,.03)}
+.cli:hover::after{color:var(--accent);transform:translateX(3px)}
+.cli-ico{font-size:14px;opacity:.4;flex-shrink:0;width:18px;text-align:center}
+.cli-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);display:block;margin-bottom:1px}
+.cli-val{font-size:var(--f-sm);color:rgba(255,255,255,.6)}
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+.footer{
+  background:var(--ink);padding:var(--s3) var(--gutter);
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:var(--s2);
+}
+.footer p{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.06em;color:rgba(255,255,255,.18);
+}
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media(max-width:800px){
+  .nav-links{display:none}
+  .nav-burger{display:flex}
+  .hero{grid-template-columns:1fr;gap:var(--s4)}
+  .hero-r{flex-direction:row;align-items:center;justify-content:flex-start;gap:var(--s3)}
+  .about-cols{grid-template-columns:1fr}
+  .honor-rest{grid-template-columns:1fr 1fr}
+  .photo-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .ph-slot:nth-child(1){grid-row:auto}
+  .news-grid{grid-template-columns:1fr 1fr}
+  .nc:nth-child(2n){border-right:none}
+  .nc:nth-child(3n){border-right:1px solid var(--line)}
+  .two-col{grid-template-columns:1fr;gap:0}
+  .contact-inner{grid-template-columns:1fr;gap:var(--s5)}
+  .pub{grid-template-columns:1fr}
+  .pub-img{width:100%;height:130px}
+  .tl{grid-template-columns:80px 14px 1fr;gap:0 10px}
+}
+@media(max-width:520px){
+  .honor-top{grid-template-columns:1fr}
+  .honor-rest{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr}
+  .nc{border-right:none!important}
+  .photo-grid{grid-template-columns:1fr}
+  .hero-r{flex-direction:column;align-items:flex-start}
+}
+
+/* ── Talks — event card treatment ── */
+.talks-grid{
+  display:flex;flex-direction:column;gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+.talk-card{
+  background:var(--white);
+  display:grid;
+  grid-template-columns:56px 110px 1fr;
+  gap:0;
+  transition:background .15s;
+}
+.talk-card.no-thumb{grid-template-columns:56px 1fr}
+.talk-card:hover{background:var(--off)}
+.talk-thumb{
+  border-right:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  padding:8px;background:var(--white);
+  overflow:hidden;
+}
+.talk-thumb img{
+  max-width:100%;max-height:130px;object-fit:contain;
+  border:1px solid var(--line);
+  cursor:zoom-in;
+  transition:transform .25s,box-shadow .25s;
+}
+.talk-card:hover .talk-thumb img{transform:scale(1.04);box-shadow:0 2px 10px rgba(0,0,0,.25)}
+
+/* Poster lightbox */
+.lightbox{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(13,13,13,.92);
+  display:none;align-items:center;justify-content:center;
+  padding:32px;cursor:zoom-out;
+}
+.lightbox.open{display:flex}
+.lightbox img{
+  max-width:92vw;max-height:92vh;object-fit:contain;
+  box-shadow:0 8px 40px rgba(0,0,0,.5);
+}
+.lightbox-close{
+  position:absolute;top:18px;right:24px;
+  font-family:var(--mono);font-size:26px;line-height:1;
+  color:rgba(255,255,255,.85);cursor:pointer;
+  background:none;border:none;padding:6px 10px;
+  transition:color .15s;
+}
+.lightbox-close:hover{color:#fff}
+.talk-type-col{
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:14px 0 14px;
+  border-right:1px solid var(--line);
+}
+.talk-type{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:0.06em;text-transform:uppercase;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  transform:rotate(180deg);
+  color:var(--faint);
+  white-space:nowrap;
+}
+.talk-type.t-oral{color:var(--accent)}
+.talk-type.t-poster{color:var(--muted)}
+.talk-type.t-challenge{color:var(--navy)}
+.talk-body{padding:12px 14px}
+.talk-title{
+  font-size:var(--f-sm);font-weight:600;
+  color:var(--ink);margin-bottom:3px;line-height:1.4;
+}
+.talk-venue{
+  font-family:var(--mono);font-size:var(--f-xs);
+  color:var(--faint);line-height:1.5;
+}
+.talk-count{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:0.05em;
+  background:var(--accent-s);color:var(--accent);
+  border:1px solid var(--accent-b);
+  padding:1px 6px;margin-left:7px;
+  vertical-align:middle;
+}
+.talk-count.navy{
+  background:var(--navy-s);color:var(--navy);
+  border-color:var(--navy-b);
+}
+
+/* ── Service — clean checklist ── */
+.svc-list{list-style:none;display:flex;flex-direction:column;gap:0}
+.svc-item{
+  display:flex;align-items:baseline;gap:10px;
+  font-size:var(--f-sm);color:var(--body);
+  padding:9px 0;border-bottom:1px solid var(--line);
+  line-height:1.6;
+}
+.svc-item:first-child{border-top:1px solid var(--line)}
+.svc-check{
+  font-size:10px;color:var(--line2);
+  flex-shrink:0;font-family:var(--mono);
+  transition:color .15s;
+}
+.svc-item:hover .svc-check{color:var(--ink)}
+
+/* Venue links inside talk cards */
+.tv-link{
+  color:var(--accent);
+  border-bottom:1px solid var(--accent-b);
+  transition:border-color .15s;
+}
+.tv-link:hover{border-color:var(--accent)}
+
+/* Tighten talk card body padding slightly for 8 cards */
+.talk-body{padding:11px 14px}
+.talk-title{
+  font-size:var(--f-sm);font-weight:600;
+  color:var(--ink);margin-bottom:3px;line-height:1.4;
+}
+.talk-venue{
+  font-family:var(--mono);font-size:10px;
+  color:var(--faint);line-height:1.6;
+}
+.talk-desc{
+  font-size:var(--f-sm);color:var(--muted);
+  line-height:1.55;margin-top:6px;
+}
+.talks-subhead{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--accent);
+  margin:var(--s4) 0 var(--s2);
+  padding-bottom:7px;border-bottom:1px solid var(--accent-b);
+}
+
+/* ── Comprehensive hover states ── */
+/* Publication rows */
+.pub:hover{background:var(--off)}
+/* Honor cards */
+.hcard:hover:not(.feat){background:var(--off);border-top-color:var(--line2)}
+/* News cards */
+.nc:hover{background:var(--off)}
+/* Collab items */
+.collab:hover{border-left-color:var(--line2)}
+/* Talk cards */
+.talk-card:hover{background:var(--off)}
+/* Pub compact items */
+.pc-item:hover{background:var(--off);padding-left:6px;transition:padding-left .15s}
+/* Service items */
+.svc-item:hover{background:var(--off)}
+/* Timeline rows */
+.tl:hover .tl-dot:not(.now){border-color:var(--ink)}
+/* All interactive link elements — consistent underline on hover */
+a:not(.nav-cv):not(.nav-name):not(.d-cta):not(.contact-cta):hover{
+  opacity:0.85;
+}
+
+
+/* ── Focus styles (accessibility) ── */
+a:focus-visible,button:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* ── Consistent transitions ── */
+.pub,.hcard,.nc,.talk-card,.svc-item,.pc-item,.collab,.tl{
+  transition:background .15s ease;
+}
+.plink,.hl,.tv-link,.pc-link,.s-more,.nav-cv,.contact-cta{
+  transition:all .15s ease;
+}
+
+/* ── Print styles ── */
+@media print{
+  .nav,.nav-burger,.drawer,.avail,.hero-links,.rev{
+    display:none!important;opacity:1!important;transform:none!important;
+  }
+  .hero{padding:1rem 0;grid-template-columns:1fr}
+  .hero-r{display:none}
+  .section{padding:1.5rem 0;border-top:1px solid #ccc}
+  .contact{background:#fff;color:#000;padding:1rem 0}
+  .contact-hl,.contact-sub{color:#000}
+  a{color:#000}
+  .pub-img,.photo-grid,.ph-slot{display:none}
+  .pub{grid-template-columns:1fr}
+  body{font-size:11pt;color:#000}
+}
+/* ═══════════════════════════════
+   TEACHING — distinct module
+═══════════════════════════════ */
+.teach-head{
+  display:block;margin-bottom:var(--s5);
+}
+.teach-head .s-title{margin-bottom:var(--s3)!important}
+.teach-philosophy{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1rem,1.6vw,1.18rem);
+  color:var(--body);line-height:1.7;
+  padding-left:var(--s3);border-left:2px solid var(--accent);
+  max-width:680px;
+}
+/* Stats strip — unique to this section */
+.teach-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);background:var(--white);
+  margin-bottom:var(--s5);
+}
+.tstat{
+  padding:var(--s3) var(--s2);
+  border-right:1px solid var(--line);
+  text-align:center;
+}
+.tstat:last-child{border-right:none}
+.tstat-num{
+  font-family:var(--mono);font-weight:500;
+  font-size:clamp(1.5rem,3vw,2.1rem);
+  color:var(--ink);line-height:1;letter-spacing:-.02em;
+  display:block;margin-bottom:6px;
+}
+.tstat-num em{color:var(--accent);font-style:normal}
+.tstat-label{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);line-height:1.4;display:block;
+}
+/* Filter pills */
+.teach-filters{
+  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:var(--s3);
+}
+.tfilter{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.05em;text-transform:uppercase;
+  padding:6px 13px;border:1px solid var(--line);
+  background:var(--white);color:var(--muted);
+  cursor:pointer;transition:all .15s;
+}
+.tfilter:hover{border-color:var(--line2);color:var(--ink)}
+.tfilter.active{
+  background:var(--ink);color:var(--white);border-color:var(--ink);
+}
+/* Project card grid */
+.proj-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:var(--s2);margin-bottom:var(--s5);
+}
+.proj{
+  border:1px solid var(--line);background:var(--white);
+  padding:var(--s3);position:relative;
+  border-top:3px solid var(--line2);
+  transition:transform .18s,box-shadow .18s,border-color .18s;
+  display:flex;flex-direction:column;gap:8px;
+}
+.proj:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(13,13,13,.07)}
+.proj.pub{border-top-color:var(--accent);background:var(--accent-s)}
+.proj-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.proj-lvl{
+  font-family:var(--mono);font-size:9px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 8px;border-radius:2px;
+}
+.lvl-msc{background:var(--navy-s);color:var(--navy);border:1px solid var(--navy-b)}
+.lvl-bsc{background:var(--off);color:var(--muted);border:1px solid var(--line2)}
+.proj-yr{
+  font-family:var(--mono);font-size:var(--f-xs);
+  color:var(--faint);margin-left:auto;
+}
+.proj-name{font-size:var(--f-md);font-weight:700;color:var(--ink);line-height:1.3}
+.proj-inst{
+  font-family:var(--mono);font-size:10px;letter-spacing:.04em;
+  color:var(--muted);text-transform:uppercase;
+}
+.proj-desc{font-size:var(--f-sm);color:var(--body);line-height:1.6}
+.proj-outcome{
+  margin-top:auto;display:inline-flex;align-items:center;gap:6px;
+  align-self:flex-start;
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.04em;
+  background:var(--accent);color:var(--white);
+  padding:4px 11px;transition:opacity .15s;
+}
+.proj-outcome:hover{opacity:.85}
+.proj.hidden{display:none}
+/* Courses block */
+.teach-courses{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:var(--s4);
+  border-top:1px solid var(--line);padding-top:var(--s4);
+}
+.tc-col-label{
+  font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);font-weight:500;
+  display:flex;align-items:baseline;gap:8px;margin-bottom:4px;
+}
+.tc-col-label span{color:var(--faint);font-size:10px}
+.tc-meta{font-size:var(--f-sm);color:var(--muted);margin-bottom:var(--s2);line-height:1.5}
+.tc-chips{display:flex;flex-wrap:wrap;gap:5px}
+.tc-chip{
+  font-family:var(--mono);font-size:var(--f-xs);
+  padding:4px 10px;border:1px solid var(--line);
+  color:var(--body);background:var(--white);
+}
+.teach-beyond{
+  margin-top:var(--s4);padding:var(--s3);
+  background:var(--off);border-left:2px solid var(--line2);
+  font-size:var(--f-sm);color:var(--body);line-height:1.7;
+}
+.teach-beyond strong{color:var(--ink);font-weight:600}
+@media(max-width:800px){
+  .teach-head{grid-template-columns:1fr;gap:var(--s3)}
+  .teach-stats{grid-template-columns:1fr 1fr}
+  .tstat:nth-child(2){border-right:none}
+  .tstat:nth-child(1),.tstat:nth-child(2){border-bottom:1px solid var(--line)}
+  .proj-grid{grid-template-columns:1fr}
+  .teach-courses{grid-template-columns:1fr;gap:var(--s3)}
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <span class="nav-name">Farheen Ramzan</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#talks">Talks</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#honors">Honors</a></li>
+    <li><a href="#teaching">Teaching</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cv" href="files/FarheenRamzan_CV.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
+  <button class="nav-burger" id="burg" aria-label="Menu" aria-expanded="false">
+    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/>
+    </svg>
+  </button>
+</nav>
+<div class="drawer" id="drw">
+  <a href="#about">About</a>
+  <a href="#publications">Publications</a>
+  <a href="#talks">Talks</a>
+  <a href="#background">Background</a>
+  <a href="#honors">Honors</a>
+  <a href="#teaching">Teaching</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="files/FarheenRamzan_CV.pdf" target="_blank" rel="noopener noreferrer" class="d-cta">Download CV</a>
+</div>
+
+<!-- HERO -->
+<div style="border-bottom:1px solid var(--line)">
+<div class="hero rev">
+  <div>
+    <p class="hero-meta">PhD Graduate · University of Sheffield</p>
+    <h1 class="hero-name">Farheen Ramzan</h1>
+    <p class="hero-role">Generative &amp; Multimodal AI for Medical Imaging</p>
+
+    <p class="hero-hook">I work on medical imaging where the data is scarce, inconsistent, and hard to trust. <em>Which is to say, most of it.</em></p>
+
+    <p class="hero-prop">
+      My research builds imaging and multimodal models across <strong>cardiac MRI</strong> during my PhD and <strong>brain imaging and neural signals</strong> before it, with a focus on the problems that get in the way: limited labelled data, combining different kinds of medical data, and the variation between scanners, patients, and sites.
+    </p>
+
+    <div class="awards">
+      <div class="award a-featured">
+        <span class="award-icon">🏆</span>
+        <div>
+          <span class="award-title">Best Paper Award, AIiH 2025</span>
+          <span class="award-desc">International Conference on AI in Healthcare · Springer LNCS · €500 prize</span>
+        </div>
+      </div>
+      <div class="award">
+        <span class="award-icon">🎓</span>
+        <div>
+          <span class="award-title">Commonwealth Scholar — UK FCDO (2022–2026)</span>
+          <span class="award-desc">Fully funded UK government doctoral scholarship · nomination-based, awarded on merit</span>
+        </div>
+      </div>
+      <div class="award">
+        <span class="award-icon">🥇</span>
+        <div>
+          <span class="award-title">Gold Medal — Ranked 1st in Cohort (2016)</span>
+          <span class="award-desc">BSc Computer Science · UET Lahore</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-links">
+      <a class="hl" href="mailto:farheen.ramzan12@gmail.com">✉ Email</a>
+      <a class="hl" href="https://scholar.google.com/citations?user=PlJD884AAAAJ&hl=en" target="_blank" rel="noopener noreferrer">🎓 Scholar</a>
+      <a class="hl" href="https://www.linkedin.com/in/farheen-ramzan-840a6497" target="_blank" rel="noopener noreferrer">🔗 LinkedIn</a>
+      <a class="hl" href="https://github.com/farheenjabeen" target="_blank" rel="noopener noreferrer">💻 GitHub</a>
+      <a class="hl" href="https://www.youtube.com/@farheenramzan2863" target="_blank" rel="noopener noreferrer">▶ YouTube</a>
+      <a class="hl" href="https://orcid.org/0000-0002-1051-6188" target="_blank" rel="noopener noreferrer">🆔 ORCID</a>
+    </div>
+  </div>
+
+  <div class="hero-r rev d2">
+    <div class="hero-photo">
+      <img src="images/photo.jpg" alt="Farheen Ramzan"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="photo-ph" style="display:none">
+        <span style="font-size:2rem;opacity:0.15">👤</span>
+        <span style="margin-top:4px">Upload photo<em>images/photo.jpg</em></span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ABOUT -->
+<section class="section tinted" id="about">
+  <div class="inner">
+    <h2 class="s-title rev">About</h2>
+    <div class="about-cols">
+      <div class="rev d1">
+        <div class="prose">
+          <p>I recently completed my PhD at <a href="https://www.sheffield.ac.uk/" target="_blank" rel="noopener noreferrer"><strong>The University of Sheffield, UK</strong></a>, working with <a href="https://www.sheffield.ac.uk/cs/people/academic/richard-clayton" target="_blank" rel="noopener noreferrer">Prof. Richard H. Clayton</a> and <a href="https://cherise215.github.io/" target="_blank" rel="noopener noreferrer">Dr. Chen (Cherise) Chen</a> on deep learning for cardiac MRI. My PhD was funded by a <a href="https://cscuk.fcdo.gov.uk/scholarships/commonwealth-phd-scholarships-for-least-developed-countries-and-vulnerable-states/" target="_blank" rel="noopener noreferrer"><strong>Commonwealth Scholarship</strong></a> from the UK Foreign, Commonwealth and Development Office. I passed my viva in 2026 and am awaiting formal conferral in August 2026.</p>
+
+          <p>My thesis, <em>Towards Automated Segmentation of Cardiac Scars through Multimodal AI</em>, automates the detection of myocardial scar from cardiac MRI, a task that normally takes a cardiologist considerable time and varies between readers. It comprises four frameworks, all developed and validated on real patient data from Nottingham University Hospitals NHS Trust.</p>
+
+          <p>The two I would point a reader to first are <strong><em>Seeing Beyond the Image</em></strong> and <strong>CLAIM</strong>. <em>Seeing Beyond the Image</em> fuses 12-lead ECG with LGE cardiac MRI through temporal-aware cross-attention, using the physiological signal to inform what imaging alone cannot show, and was selected for an oral at <strong>IEEE ISBI 2026</strong>. CLAIM is a conditional diffusion model that uses AHA-17 anatomical priors to synthesise realistic, diverse scar images for training, addressing the shortage of labelled data; it received the <strong>Best Paper Award at AIiH 2025</strong>. The remaining two are a cascaded multi-sequence segmentation network and a domain-generalised fusion transformer built to handle missing sequences and scanner variation.</p>
+
+          <p class="xp-intro">Before Sheffield, I spent six years in research and teaching in Pakistan, after a Master's at the <a href="https://www.uet.edu.pk/home/" target="_blank" rel="noopener noreferrer">University of Engineering &amp; Technology, Lahore, Pakistan</a> on neuroimaging, where I worked on classifying Alzheimer's disease from fMRI. That is where my work in medical imaging began, and it carried through brain MRI and neural signals into the cardiac work that followed.</p>
+
+          <div class="xp-grid">
+            <div class="xp-card">
+              <div class="xp-top">
+                <span class="xp-role">Research Officer → Team Lead</span>
+                <span class="xp-years">2016–2020</span>
+              </div>
+              <p class="xp-place"><a href="https://www.kics.edu.pk/labs/about/brl" target="_blank" rel="noopener noreferrer">Bioinformatics Research Lab, KICS ↗</a></p>
+              <p class="xp-desc">Progressed to <strong>leading a team of five to six researchers</strong>. My own research was in brain MRI segmentation and EEG-based brain-computer interfaces.</p>
+              <div class="xp-chips">
+                <span class="xp-chip-label">Domains</span>
+                <span class="xp-chip">Medical Imaging</span>
+                <span class="xp-chip">Brain-Computer Interfaces</span>
+                <span class="xp-chip">Bioinformatics</span>
+                <span class="xp-chip">Drug Discovery</span>
+              </div>
+            </div>
+
+            <div class="xp-card">
+              <div class="xp-top">
+                <span class="xp-role">Lecturer</span>
+                <span class="xp-years">2020–2022</span>
+              </div>
+              <p class="xp-place"><a href="https://www.uet.edu.pk/home/" target="_blank" rel="noopener noreferrer">UET Lahore ↗</a></p>
+              <p class="xp-desc"><strong>Designed and taught my own courses</strong>, supervised postgraduate and undergraduate research projects, and served on the departmental Board of Studies.</p>
+              <div class="xp-chips">
+                <span class="xp-chip-label">Taught</span>
+                <span class="xp-chip">Artificial Intelligence</span>
+                <span class="xp-chip">Human-Computer Interaction</span>
+                <span class="xp-chip">Programming for Data Science</span>
+                <span class="xp-chip">UX / UI Design</span>
+              </div>
+            </div>
+          </div>
+
+          <p>I recently passed my viva and am looking for a postdoctoral position, ideally in a group with strong clinical connections, where I can keep working on methods for the messy, multimodal data that real clinical questions come with.</p>
+        </div>
+        <div class="vision-box rev d2">
+          <span class="vision-label">Research vision</span>
+          <p class="vision-text">My next direction is to take the generative and multimodal methods I built for cardiac imaging into the wider range of clinical problems that share the same constraints: scarce labels, multiple modalities, and data that varies across sites. The underlying principles carry over, anatomical and physiological conditioning, learning from limited data, and robustness across centres, and I am keen to apply them in new imaging domains and clinical questions, working closely with the people who will use the results.</p>
+        </div>
+      </div>
+      <div class="sidebar rev d2">
+        <div>
+          <span class="sb-heading">Research areas</span>
+          <div class="tags">
+            <span class="tag">Generative AI</span>
+            <span class="tag">Diffusion Models</span>
+            <span class="tag">Multimodal Learning</span>
+            <span class="tag">Image Segmentation</span>
+            <span class="tag">Domain Generalisation</span>
+            <span class="tag">Cardiac MRI</span>
+            <span class="tag">Brain MRI &amp; Neuroimaging</span>
+            <span class="tag">Brain-Computer Interfaces</span>
+          </div>
+        </div>
+        <div>
+          <span class="sb-heading">Technical skills</span>
+          <div class="tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">TensorFlow / Keras</span>
+            <span class="tag">MONAI</span>
+            <span class="tag">scikit-learn</span>
+            <span class="tag">Hugging Face</span>
+            <span class="tag">Diffusion (DDPM / DDIM / LDM)</span>
+            <span class="tag">Stable Diffusion</span>
+            <span class="tag">GANs</span>
+            <span class="tag">ECG &amp; EEG signal processing</span>
+            <span class="tag">Python · R · MATLAB</span>
+            <span class="tag">HPC / SLURM</span>
+            <span class="tag">Git · Weights &amp; Biases</span>
+          </div>
+        </div>
+        <div>
+          <span class="sb-heading">Clinical collaboration</span>
+          <p class="collab-statement">My PhD work was developed and validated on real patient cardiac MRI from <strong>Nottingham University Hospitals NHS Trust</strong>, under formal ethics governance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section class="section" id="publications">
+  <div class="inner">
+    <div class="s-title-row rev">
+      <h2 class="s-title">Publications</h2>
+      <a class="s-more" href="https://scholar.google.com/citations?user=PlJD884AAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar · 892 citations · h-index 6 ↗</a>
+    </div>
+    <div class="pub-list rev">
+
+      <!-- ISBI 2026 -->
+      <div class="pub">
+        <div class="pub-img">
+          <img src="images/papers/isbi.png" alt="Seeing Beyond the Image — ECG-guided scar segmentation figure"/>
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta">
+            <span class="pub-venue">IEEE ISBI 2026</span>
+            <span class="badge b-oral">Oral</span>
+          </div>
+          <p class="pub-title">Seeing Beyond the Image: ECG and Anatomical Knowledge-Guided Myocardial Scar Segmentation from Late Gadolinium-Enhanced Images</p>
+          <p class="pub-authors"><strong>Ramzan, F.</strong>, Kiberu, Y., Jathanna, N., Jabrane, M., Grau, V., Jamil-Copley, S., Clayton, R. H., &amp; Chen, C.</p>
+          <div class="pub-links">
+            <a class="plink-project" href="projects/seeing_beyond.html">Project page →</a>
+            <a class="plink" href="https://ieeexplore.ieee.org/abstract/document/11515710" target="_blank" rel="noopener noreferrer">Paper</a>
+            <a class="plink" href="https://arxiv.org/abs/2511.14702" target="_blank" rel="noopener noreferrer">arXiv</a>
+            <a class="plink" href="https://github.com/farheenjabeen/multimodal_ECG_LGE" target="_blank" rel="noopener noreferrer">Code ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLAIM — featured -->
+      <div class="pub featured">
+        <div class="pub-img">
+          <img src="images/papers/claim.png" alt="CLAIM — clinically-guided LGE scar synthesis figure"/>
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta">
+            <span class="pub-venue">AIiH 2025 · Springer LNCS 16038</span>
+            <span class="badge b-award">🏆 Best Paper · €500</span>
+          </div>
+          <p class="pub-title">CLAIM: Clinically-Guided LGE Augmentation for Realistic and Diverse Myocardial Scar Synthesis and Segmentation</p>
+          <p class="pub-authors"><strong>Ramzan, F.</strong>, Kiberu, Y., Jathanna, N., Jamil-Copley, S., Clayton, R. H., &amp; Chen, C.</p>
+          <div class="pub-links">
+            <a class="plink-project" href="projects/claim.html">Project page →</a>
+            <a class="plink" href="https://link.springer.com/chapter/10.1007/978-3-032-00652-3_20" target="_blank" rel="noopener noreferrer">Paper</a>
+            <a class="plink" href="https://arxiv.org/abs/2506.15549" target="_blank" rel="noopener noreferrer">arXiv</a>
+            <a class="plink" href="https://github.com/farheenjabeen/CLAIM-Scar-Synthesis" target="_blank" rel="noopener noreferrer">Code ↗</a>
+            <a class="plink" href="https://aiih.cc/awards-2025/" target="_blank" rel="noopener noreferrer">Award ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CinC 2024 -->
+      <div class="pub">
+        <div class="pub-img">
+          <img src="images/papers/cinc.png" alt="Cascaded CNN multi-modality CMR scar segmentation figure"/>
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta">
+            <span class="pub-venue">Computing in Cardiology 2024 · IEEE</span>
+          </div>
+          <p class="pub-title">Improving Myocardial Scar Segmentation with End-to-End and Cascaded CNN using Hybrid Loss and Multi-Modality CMR Imaging</p>
+          <p class="pub-authors"><strong>Ramzan, F.</strong>, Chen, C., &amp; Clayton, R. H.</p>
+          <div class="pub-links"><a class="plink" href="https://cinc.org/archives/2024/pdf/CinC2024-148.pdf" target="_blank" rel="noopener noreferrer">Paper</a></div>
+        </div>
+      </div>
+
+      <!-- JMS 2020 -->
+      <div class="pub">
+        <div class="pub-img">
+          <img src="images/papers/jms.png" alt="Alzheimer's multi-class classification from resting-state fMRI figure"/>
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta">
+            <span class="pub-venue">Journal of Medical Systems · 2020</span>
+            <span class="badge b-cite">631 citations</span>
+          </div>
+          <p class="pub-title">A Deep Learning Approach for Automated Diagnosis and Multi-Class Classification of Alzheimer's Disease Stages using Resting-State fMRI</p>
+          <p class="pub-authors"><strong>Ramzan, F.</strong>, Khan, M. U. G., Rehmat, A., Iqbal, S., Saba, T., Rehman, A., &amp; Mehmood, Z.</p>
+          <div class="pub-links"><a class="plink" href="https://link.springer.com/article/10.1007/s10916-019-1475-2" target="_blank" rel="noopener noreferrer">Paper</a></div>
+        </div>
+      </div>
+
+      <!-- IEEE Access 2020 -->
+      <div class="pub">
+        <div class="pub-img">
+          <img src="images/papers/ieeeaccess.png" alt="Volumetric brain segmentation with 3D CNN figure"/>
+        </div>
+        <div class="pub-body">
+          <div class="pub-meta">
+            <span class="pub-venue">IEEE Access · 2020</span>
+            <span class="badge b-cite">110 citations</span>
+          </div>
+          <p class="pub-title">Volumetric Segmentation of Brain Regions from MRI Scans using 3D Convolutional Neural Networks</p>
+          <p class="pub-authors"><strong>Ramzan, F.</strong>, Khan, M. U. G., Iqbal, S., Saba, T., &amp; Rehman, A.</p>
+          <div class="pub-links"><a class="plink" href="https://ieeexplore.ieee.org/document/9104657" target="_blank" rel="noopener noreferrer">Paper</a></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Compact full list -->
+    <div class="pub-compact rev">
+      <div class="pc-group">
+        <span class="pc-label">All conference papers</span>
+        <ul class="pc-list">
+          <li class="pc-item"><strong>Ramzan, F.</strong>, Kiberu, Y., Jathanna, N., Jabrane, M., Grau, V., Jamil-Copley, S., Clayton, R. H., &amp; Chen, C. (2026). <em>Seeing Beyond the Image.</em> IEEE ISBI 2026.<span class="pc-tag">Oral</span><a class="pc-link" href="https://ieeexplore.ieee.org/abstract/document/11515710" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item"><strong>Ramzan, F.</strong>, Kiberu, Y., Jathanna, N., Jamil-Copley, S., Clayton, R. H., &amp; Chen, C. (2025). <em>CLAIM.</em> AIiH 2025, LNCS 16038, pp. 279–292. Springer.<span class="pc-tag">🏆 Best Paper</span><a class="pc-link" href="projects/claim.html">Project →</a><a class="pc-link" href="https://link.springer.com/chapter/10.1007/978-3-032-00652-3_20" target="_blank" rel="noopener noreferrer">Paper ↗</a><a class="pc-link" href="https://arxiv.org/abs/2506.15549" target="_blank" rel="noopener noreferrer">arXiv ↗</a></li>
+          <li class="pc-item"><strong>Ramzan, F.</strong>, Chen, C., &amp; Clayton, R. H. (2024). <em>Improving Myocardial Scar Segmentation with Cascaded CNN.</em> Computing in Cardiology 2024. IEEE.<a class="pc-link" href="https://cinc.org/archives/2024/pdf/CinC2024-148.pdf" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item">Rehman, H. A., <strong>Ramzan, F.</strong>, et al. (2021). <em>Genome Scale Phylogenetic Analysis Differentiates SARS-CoV-2 Strains in Pakistani and Indian COVID-19 Patients with and without Travel History.</em> IEEE.<a class="pc-link" href="https://ieeexplore.ieee.org/abstract/document/9692973" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item">Younis, H., <strong>Ramzan, F.</strong>, et al. (2019). <em>Wheelchair Training Virtual Environment for People with Physical and Cognitive Disabilities.</em> IEEE.<a class="pc-link" href="https://ieeexplore.ieee.org/abstract/document/8994550" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+        </ul>
+      </div>
+      <div class="pc-group">
+        <span class="pc-label">All journal articles</span>
+        <ul class="pc-list">
+          <li class="pc-item"><strong>Ramzan, F.</strong>, et al. (2020). <em>Deep Learning for Alzheimer's Disease Classification using fMRI.</em> Journal of Medical Systems, 44(2), 37.<span class="pc-tag">631 citations</span><a class="pc-link" href="https://link.springer.com/article/10.1007/s10916-019-1475-2" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item"><strong>Ramzan, F.</strong>, et al. (2020). <em>Volumetric Brain Segmentation using 3D CNNs.</em> IEEE Access, 8, 103697–103709.<span class="pc-tag">110 citations</span><a class="pc-link" href="https://ieeexplore.ieee.org/document/9104657" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item">Sajjad, M., <strong>Ramzan, F.</strong>, et al. (2021). <em>Deep Convolutional Generative Adversarial Network for Alzheimer's Disease Classification using Positron Emission Tomography (PET) and Synthetic Data Augmentation.</em> Microscopy Research and Technique.<span class="pc-tag">IF 2.3</span><a class="pc-link" href="https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/full/10.1002/jemt.23861" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item">Rehman, H. A., <strong>Ramzan, F.</strong>, et al. (2021). <em>Comprehensive Comparative Genomic and Microsatellite Analysis of SARS, MERS, BAT-SARS, and COVID-19 Coronaviruses.</em> Journal of Medical Virology.<span class="pc-tag">IF 6.1</span><a class="pc-link" href="https://onlinelibrary.wiley.com/doi/full/10.1002/jmv.26974" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item">Abbas, Q., <strong>Ramzan, F.</strong>, &amp; Khan, M. U. G. (2021). <em>Acral Melanoma Detection using Dermoscopic Images and Convolutional Neural Networks.</em> Visual Computing for Industry, Biomedicine, and Art.<a class="pc-link" href="https://link.springer.com/article/10.1186/s42492-021-00091-z" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+          <li class="pc-item">Wasim, M., Sajjad, M., <strong>Ramzan, F.</strong>, et al. (2018). <em>A Review and Classification of Widely Used Offline Brain Datasets.</em> IJACSA, 9(2).<a class="pc-link" href="https://dx.doi.org/10.14569/IJACSA.2018.090254" target="_blank" rel="noopener noreferrer">Paper ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section tinted tight" id="talks">
+  <div class="inner">
+
+    <!-- Talks — event card grid -->
+    <h2 class="col-title rev" style="margin-bottom:var(--s3)">Talks &amp; Presentations</h2>
+    <div class="talks-grid rev" style="margin-bottom:var(--s5)">
+
+      <!-- Oral 1: ISBI + Multimodal Workshop -->
+      <div class="talk-card">
+        <div class="talk-type-col">
+          <span class="talk-type t-oral">Oral</span>
+        </div>
+        <div class="talk-thumb">
+          <img loading="lazy" src="images/posters/seeing_beyond.png" alt="Seeing Beyond the Image presentation"
+               onclick="openPoster(this.src)" onerror="this.style.display='none'"/>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title"><em>Seeing Beyond the Image</em> — ECG-Guided Myocardial Scar Segmentation<span class="talk-count">×2</span></p>
+          <p class="talk-venue">
+            <a href="https://biomedicalimaging.org/2026/" target="_blank" rel="noopener noreferrer" class="tv-link">IEEE ISBI 2026</a>, London &nbsp;·&nbsp;
+            <a href="#" target="_blank" rel="noopener noreferrer" class="tv-link">UK Multimodal AI Workshop</a>, Barbican, London
+          </p>
+          <p class="talk-desc">Fuses 12-lead ECG with LGE cardiac MRI through temporal-aware cross-attention, using the physiological signal to inform scar segmentation.</p>
+        </div>
+      </div>
+
+      <!-- Oral 2: CLAIM ×4 -->
+      <div class="talk-card">
+        <div class="talk-type-col">
+          <span class="talk-type t-oral">Oral</span>
+        </div>
+        <div class="talk-thumb">
+          <img loading="lazy" src="images/posters/claim.png" alt="CLAIM poster preview"
+               onclick="openPoster(this.src)" onerror="this.style.display='none'"/>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title"><em>CLAIM</em> — Clinically-Guided LGE Augmentation for Cardiac Scar Synthesis<span class="talk-count">×4</span></p>
+          <p class="talk-venue">
+            <a href="https://aiih.cc" target="_blank" rel="noopener noreferrer" class="tv-link">AIiH 2025</a>, Cambridge (Best Paper) &nbsp;·&nbsp;
+            Insigneo Generative AI Workshop &nbsp;·&nbsp;
+            Engineering Researcher Symposium &nbsp;·&nbsp;
+            Prof. Wilkinson Seminar, Sheffield
+          </p>
+          <p class="talk-desc">A conditional diffusion model using AHA-17 anatomical priors to synthesise realistic, diverse scar images for training. Best Paper at AIiH 2025.</p>
+        </div>
+      </div>
+
+      <!-- Poster: CinC 2024 -->
+      <div class="talk-card">
+        <div class="talk-type-col">
+          <span class="talk-type t-poster">Poster</span>
+        </div>
+        <div class="talk-thumb">
+          <img loading="lazy" src="images/posters/cinc.png" alt="CinC 2024 poster preview"
+               onclick="openPoster(this.src)" onerror="this.style.display='none'"/>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title">Improving Myocardial Scar Segmentation with Cascaded CNN and Multi-Modality CMR</p>
+          <p class="talk-venue">
+            <a href="https://cinc.org/2024/" target="_blank" rel="noopener noreferrer" class="tv-link">Computing in Cardiology 2024</a>, Karlsruhe, Germany &nbsp;·&nbsp; Sept 2024
+          </p>
+          <p class="talk-desc">A cascaded CNN that combines multiple CMR sequences (bSSFP, T2, LGE) with a hybrid loss to improve scar delineation over single-sequence baselines.</p>
+        </div>
+      </div>
+
+      <!-- Poster: Fickle Heart -->
+      <div class="talk-card">
+        <div class="talk-type-col">
+          <span class="talk-type t-poster">Poster</span>
+        </div>
+        <div class="talk-thumb">
+          <img loading="lazy" src="images/posters/fickle_heart.png" alt="Fickle Heart workshop poster preview"
+               onclick="openPoster(this.src)" onerror="this.style.display='none'"/>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title">Diffusion Models for Myocardial Scar Segmentation and Uncertainty Estimation</p>
+          <p class="talk-venue">
+            Fickle Heart: UQ, AI and Digital Twins Workshop, Cambridge &nbsp;·&nbsp; June 2024
+          </p>
+          <p class="talk-desc">A shape-prior-informed diffusion model that generates an ensemble of scar segmentations, yielding per-pixel uncertainty maps alongside the prediction.</p>
+        </div>
+      </div>
+
+      <!-- Poster: Insigneo Showcase 2024 -->
+      <div class="talk-card">
+        <div class="talk-type-col">
+          <span class="talk-type t-poster">Poster</span>
+        </div>
+        <div class="talk-thumb">
+          <img loading="lazy" src="images/posters/lge_2024.png" alt="Insigneo Showcase 2024 poster preview"
+               onclick="openPoster(this.src)" onerror="this.style.display='none'"/>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title">Modelling Left Ventricular Scars in Myocardial Infarction through Deep Learning and Medical Imaging</p>
+          <p class="talk-venue">
+            <a href="https://insigneo.org" target="_blank" rel="noopener noreferrer" class="tv-link">Insigneo Showcase</a> 2024 &nbsp;·&nbsp;
+            COM Research Away Day 2024, University of Sheffield
+          </p>
+          <p class="talk-desc">A deep learning approach to modelling left ventricular scar in myocardial infarction from cardiac MRI.</p>
+        </div>
+      </div>
+
+      <!-- Poster: Insigneo Showcase 2023 -->
+      <div class="talk-card">
+        <div class="talk-type-col">
+          <span class="talk-type t-poster">Poster</span>
+        </div>
+        <div class="talk-thumb">
+          <img loading="lazy" src="images/posters/lge_2023.png" alt="Insigneo Showcase 2023 poster preview"
+               onclick="openPoster(this.src)" onerror="this.style.display='none'"/>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title">Automated Segmentation and Reconstruction of Myocardial Left Ventricular Scar</p>
+          <p class="talk-venue">
+            <a href="https://insigneo.org" target="_blank" rel="noopener noreferrer" class="tv-link">Insigneo Showcase</a> 2023 &nbsp;·&nbsp;
+            COM Research Away Day 2023, University of Sheffield
+          </p>
+          <p class="talk-desc">Automated segmentation and 3D reconstruction of left ventricular myocardial scar from cardiac MRI.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="talks-subhead rev">Challenges</p>
+    <div class="talks-grid rev" style="margin-bottom:var(--s5)">
+
+      <!-- Challenge: MyOPS++ -->
+      <div class="talk-card no-thumb">
+        <div class="talk-type-col">
+          <span class="talk-type t-challenge">Challenge</span>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title">MyOPS++ — Myocardial Pathology Segmentation Challenge</p>
+          <p class="talk-venue">
+            <a href="https://zmic.org.cn/care_2024/track4/" target="_blank" rel="noopener noreferrer" class="tv-link">MICCAI 2024</a>, Marrakesh &nbsp;·&nbsp; Multi-sequence Cardiac MRI
+          </p>
+        </div>
+      </div>
+
+      <!-- Challenge: MYOSAIQ -->
+      <div class="talk-card no-thumb">
+        <div class="talk-type-col">
+          <span class="talk-type t-challenge">Challenge</span>
+        </div>
+        <div class="talk-body">
+          <p class="talk-title">MYOSAIQ — Myocardial Scar AI Quantification Challenge</p>
+          <p class="talk-venue">
+            <a href="https://www.creatis.insa-lyon.fr/Challenge/myosaiq/databases.html" target="_blank" rel="noopener noreferrer" class="tv-link">FIMH 2023</a>, Lyon, France &nbsp;·&nbsp; Scar Segmentation and Quantification
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- BACKGROUND -->
+<section class="section" id="background">
+  <div class="inner">
+    <h2 class="s-title rev">Background</h2>
+    <div class="timeline">
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">2026</span><span style="display:block">Now</span></div>
+        <div class="tl-spine"><div class="tl-dot now"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-now">● Current</span>
+          <p class="tl-heading">Viva Passed, Awaiting Conferral</p>
+          <p class="tl-detail">PhD conferral August 2026 · <a href="https://www.sheffield.ac.uk/" target="_blank" rel="noopener noreferrer">The University of Sheffield, UK</a> · Seeking a postdoctoral position in medical imaging AI across Europe</p>
+        </div>
+      </div>
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">Jun–Jul</span><span style="display:block">2025</span></div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-work">Research</span>
+          <p class="tl-heading">Research Assistant (Part-time)</p>
+          <p class="tl-detail">Chen's Medical Vision Lab · Sheffield · Contributed to a Royal Society funded project on multi-modal data integration for cardiac scar mapping</p>
+        </div>
+      </div>
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">2023–</span><span style="display:block">2024</span></div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-work">Teaching</span>
+          <p class="tl-heading">Graduate Teaching Assistant</p>
+          <p class="tl-detail">Sheffield · Supported teaching across Java Programming (100+ students per cohort), Team Software Project, and Bioinspired Computing over four semesters</p>
+        </div>
+      </div>
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">2022–</span><span style="display:block">2026</span></div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-phd">PhD</span>
+          <p class="tl-heading">PhD in Computer Science · Doctoral Researcher</p>
+          <p class="tl-detail">Sheffield · <strong>Commonwealth Scholar (UK FCDO)</strong> · Supervised by <a href="https://www.sheffield.ac.uk/cs/people/academic/richard-clayton" target="_blank" rel="noopener noreferrer">Prof. Richard H. Clayton</a> and <a href="https://cherise215.github.io/" target="_blank" rel="noopener noreferrer">Dr. Chen (Cherise) Chen</a>. Thesis: <em>Towards Automated Segmentation of Cardiac Scars through Multimodal AI</em></p>
+        </div>
+      </div>
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">2020–</span><span style="display:block">2022</span></div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-work">Teaching</span>
+          <p class="tl-heading">Lecturer</p>
+          <p class="tl-detail">Department of Computer Science, <a href="https://www.uet.edu.pk/home/" target="_blank" rel="noopener noreferrer">University of Engineering &amp; Technology, Lahore, Pakistan</a> · Taught Artificial Intelligence, Human-Computer Interaction, Computer Programming for Data Science, and UX/UI Design to over 200 students per semester. Served as Secretary of the Board of Studies.</p>
+        </div>
+      </div>
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">2016–</span><span style="display:block">2020</span></div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-work">Research</span>
+          <p class="tl-heading">Research Officer → Senior Research Officer → Team Lead</p>
+          <p class="tl-detail"><a href="https://www.kics.edu.pk/labs/about/brl" target="_blank" rel="noopener noreferrer">Bioinformatics Research Lab, Al-Khawarizmi Institute of Computer Science (KICS)</a>, UET Lahore · Research spanned medical imaging, brain-computer interfaces, bioinformatics and drug discovery</p>
+        </div>
+      </div>
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">2017–</span><span style="display:block">2019</span></div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-edu">MSc</span>
+          <p class="tl-heading">MSc Computer Science — CGPA 3.963/4.0</p>
+          <p class="tl-detail">UET Lahore · Supervised by <a href="https://scholar.google.com/citations?user=WM9A5m4AAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Dr. Muhammad Usman Ghani Khan</a>. Thesis: <em>Towards a Unified Deep Learning Framework for Alzheimer's Disease Classification using Medical Imaging</em>, later published in the <em>Journal of Medical Systems</em></p>
+        </div>
+      </div>
+
+      <div class="tl rev">
+        <div class="tl-yr"><span style="display:block">2012–</span><span style="display:block">2016</span></div>
+        <div class="tl-spine"><div class="tl-dot"></div></div>
+        <div class="tl-body">
+          <span class="tt tt-edu">BSc</span>
+          <p class="tl-heading">BSc Computer Science — CGPA 3.847/4.0</p>
+          <p class="tl-detail">UET Lahore · Awarded the <strong>Gold Medal</strong> for ranking first in the BSc Computer Science cohort</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HONORS -->
+<section class="section tinted" id="honors">
+  <div class="inner">
+    <h2 class="s-title rev">Honors &amp; Awards</h2>
+    <div class="honors-layout rev">
+      <!-- Top 2 — full width, given most space -->
+      <div class="honor-top">
+        <div class="hcard feat">
+          <span class="h-yr">2025</span>
+          <p class="h-title">Best Paper Award, AIiH 2025</p>
+          <p class="h-body">Awarded at the International Conference on AI in Healthcare, Cambridge, for the CLAIM framework. Peer-reviewed and internationally competitive. Springer LNCS, €500 prize. <a href="https://aiih.cc/awards-2025/" target="_blank" rel="noopener noreferrer">aiih.cc ↗</a></p>
+        </div>
+        <div class="hcard">
+          <span class="h-yr">2022</span>
+          <p class="h-title">Commonwealth PhD Scholarship, UK FCDO</p>
+          <p class="h-body">A fully funded UK government doctoral scholarship from the Foreign, Commonwealth and Development Office. It is competitive and nomination-based: candidates are put forward through a national nominating agency rather than applying directly, and selection turns on academic merit, the research proposal, and potential impact. It covered my tuition, stipend, and travel for the full PhD. <a href="https://cscuk.fcdo.gov.uk/scholarships/commonwealth-phd-scholarships-for-least-developed-countries-and-vulnerable-states/" target="_blank" rel="noopener noreferrer">cscuk.fcdo.gov.uk ↗</a></p>
+        </div>
+      </div>
+      <!-- Bottom 4 — compact -->
+      <div class="honor-rest">
+        <div class="hcard">
+          <span class="h-yr">2026</span>
+          <p class="h-title">UKRI AIRR Compute Award</p>
+          <p class="h-body">A competitive compute grant from UK Research and Innovation, awarding 10,000 GPU hours on Isambard-AI, the UK national AI supercomputer. Team award led by Dr. Chen Chen.</p>
+        </div>
+        <div class="hcard">
+          <span class="h-yr">2026</span>
+          <p class="h-title">Sheffield Innovation and Problem Solving Award</p>
+          <p class="h-body">Nominated by Dr. Chen Chen for the University of Sheffield ISW Awards 2026, in recognition of independently identifying and solving two open problems in the thesis: data scarcity (CLAIM) and ECG-MRI temporal misalignment (TAFF).</p>
+        </div>
+        <div class="hcard">
+          <span class="h-yr">2025</span>
+          <p class="h-title">Royal Society Project</p>
+          <p class="h-body">Contributed as a research assistant to a Royal Society funded project, Advancing Cardiac Care through Multi-Modal Data Integration for Precise Scar Mapping, integrating 12-lead ECG with cardiac MRI to improve scar segmentation.</p>
+        </div>
+        <div class="hcard">
+          <span class="h-yr">2016</span>
+          <p class="h-title">Gold Medal, Ranked 1st in Cohort</p>
+          <p class="h-body">Awarded for ranking first in the BSc Computer Science cohort at UET Lahore.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEACHING -->
+<section class="section" id="teaching">
+  <div class="inner">
+
+    <div class="teach-head rev">
+      <h2 class="s-title" style="margin-bottom:0">Teaching &amp; Mentorship</h2>
+      <p class="teach-philosophy">Most of what I understand about machine learning, I understand because I had to explain it to students who were sharp but new to it. Supervising their projects is the part I like most, and a few have gone further than either of us expected.</p>
+    </div>
+
+    <!-- Teaching roles -->
+    <p class="talks-subhead rev">Teaching roles</p>
+    <div class="teach-courses rev">
+      <div>
+        <p class="tc-col-label">Graduate Teaching Assistant <span>· Sheffield · 2023–24</span></p>
+        <p class="tc-meta">Four semesters supporting core CS teaching, including a Java cohort of over a hundred students.</p>
+        <div class="tc-chips">
+          <span class="tc-chip">Java Programming</span>
+          <span class="tc-chip">Team Software Project</span>
+          <span class="tc-chip">Bioinspired Computing</span>
+        </div>
+      </div>
+      <div>
+        <p class="tc-col-label">Lecturer <span>· UET Lahore · 2020–22</span></p>
+        <p class="tc-meta">Designed and delivered my own courses to cohorts of more than two hundred, and served as Secretary of the Board of Studies.</p>
+        <div class="tc-chips">
+          <span class="tc-chip">Artificial Intelligence</span>
+          <span class="tc-chip">Human-Computer Interaction</span>
+          <span class="tc-chip">Programming for Data Science</span>
+          <span class="tc-chip">UX / UI Design</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filterable project cards -->
+    <p class="talks-subhead rev">Student projects supervised</p>
+    <div class="teach-filters rev">
+      <button class="tfilter active" data-filter="all">All projects</button>
+      <button class="tfilter" data-filter="published">Led to papers</button>
+      <button class="tfilter" data-filter="sheffield">Sheffield</button>
+      <button class="tfilter" data-filter="uet">UET Lahore</button>
+    </div>
+
+    <div class="proj-grid rev">
+
+      <!-- Meryem Jabrane — published -->
+      <div class="proj pub" data-tags="published sheffield">
+        <div class="proj-top">
+          <span class="proj-lvl lvl-msc">MSc</span>
+          <span class="proj-yr">2025</span>
+        </div>
+        <p class="proj-name">Meryem Jabrane</p>
+        <p class="proj-inst">University of Sheffield</p>
+        <p class="proj-desc">Multimodal fusion of 12-lead ECG and cardiac MRI for myocardial scar segmentation, bringing physiological signal and spatial imaging together in one model.</p>
+        <a class="proj-outcome" href="https://ieeexplore.ieee.org/abstract/document/11515710" target="_blank" rel="noopener noreferrer">★ Co-authored · IEEE ISBI 2026 (Oral) ↗</a>
+      </div>
+
+      <!-- Qaiser Abbas — published -->
+      <div class="proj pub" data-tags="published uet">
+        <div class="proj-top">
+          <span class="proj-lvl lvl-msc">MSc</span>
+          <span class="proj-yr">2019–20</span>
+        </div>
+        <p class="proj-name">Qaiser Abbas</p>
+        <p class="proj-inst">UET Lahore</p>
+        <p class="proj-desc">Detecting acral lentiginous melanoma from dermoscopic images with deep learning, trained on a clinical dermoscopy dataset.</p>
+        <a class="proj-outcome" href="https://doi.org/10.1186/s42492-021-00091-z" target="_blank" rel="noopener noreferrer">★ Co-authored · Springer journal ↗</a>
+      </div>
+
+      <!-- Grace D'Abdank Kunicki -->
+      <div class="proj" data-tags="sheffield">
+        <div class="proj-top">
+          <span class="proj-lvl lvl-bsc">BSc</span>
+          <span class="proj-yr">2025–26</span>
+        </div>
+        <p class="proj-name">Grace D'Abdank Kunicki</p>
+        <p class="proj-inst">University of Sheffield</p>
+        <p class="proj-desc">Domain-generalised segmentation of LV scar from LGE-MRI, tested across multi-centre clinical datasets to see whether a model holds up beyond the site it was trained on.</p>
+      </div>
+
+      <!-- Anam Anwar -->
+      <div class="proj" data-tags="uet">
+        <div class="proj-top">
+          <span class="proj-lvl lvl-msc">MSc</span>
+          <span class="proj-yr">2021–22</span>
+        </div>
+        <p class="proj-name">Anam Anwar</p>
+        <p class="proj-inst">UET Lahore</p>
+        <p class="proj-desc">DaT-SPECT based classification of Parkinson's disease and SWEDD, combining motor and non-motor assessments in a multimodal deep learning model.</p>
+      </div>
+
+      <!-- Bushra Tayyaba -->
+      <div class="proj" data-tags="uet">
+        <div class="proj-top">
+          <span class="proj-lvl lvl-msc">MSc</span>
+          <span class="proj-yr">2021–22</span>
+        </div>
+        <p class="proj-name">Bushra Tayyaba</p>
+        <p class="proj-inst">UET Lahore</p>
+        <p class="proj-desc">Multiclass breast cancer histopathology classification using transfer learning with stain normalisation, aimed at staying robust across different scanners.</p>
+      </div>
+
+      <!-- BSc cohort -->
+      <div class="proj" data-tags="uet">
+        <div class="proj-top">
+          <span class="proj-lvl lvl-bsc">BSc · 4 groups</span>
+          <span class="proj-yr">2021–22</span>
+        </div>
+        <p class="proj-name">Final-year project groups</p>
+        <p class="proj-inst">UET Lahore · 16–20 students</p>
+        <p class="proj-desc">Supervised four undergraduate teams across early-onset Parkinson's prediction, gamified learning for autistic children, AI-driven recruitment, and a university management system.</p>
+      </div>
+
+    </div>
+
+    <p class="teach-beyond rev">Outside formal teaching, I mentored a team of five to six researchers as a <strong>Research Team Lead</strong> at UET Lahore, volunteered as a <strong>demonstrator</strong> for fifty A-level pupils at a Sheffield Medical Physics outreach event, and joined a <strong>Women in Technology</strong> panel in 2026 to talk about AI research with students and early-career researchers.</p>
+
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="section tinted" id="news">
+  <div class="inner">
+    <h2 class="s-title rev">News</h2>
+    <div class="news-feed rev">
+      <div class="nc"><div class="nc-date">05 · 2026</div><div class="nc-text">🎓 <strong>Viva passed</strong> at the University of Sheffield. Formal conferral coming in August 2026.</div></div>
+      <div class="nc"><div class="nc-date">05 · 2026</div><div class="nc-text">🎤 Invited as an <strong>AI panelist</strong> at the Sheffield Women in Technology event, speaking alongside academics and industry researchers.</div></div>
+      <div class="nc"><div class="nc-date">04 · 2026</div><div class="nc-text">🏅 <strong>Nominated</strong> for the Sheffield Innovation and Problem Solving Award 2026 by Dr. Chen Chen, for independently identifying and solving two open research problems during the PhD.</div></div>
+      <div class="nc"><div class="nc-date">03 · 2026</div><div class="nc-text">🎤 <strong>Oral presentation</strong> at <a href="https://ieeexplore.ieee.org/abstract/document/11515710" target="_blank" rel="noopener noreferrer">IEEE ISBI 2026</a> in London, presenting <em>Seeing Beyond the Image</em>, on ECG-guided cardiac scar segmentation.</div></div>
+      <div class="nc"><div class="nc-date">01 · 2026</div><div class="nc-text">💻 Awarded <strong>10,000 GPU hours</strong> on Isambard-AI through the UKRI AI Research Resource (AIRR) scheme, supporting generative cardiac AI research.</div></div>
+      <div class="nc"><div class="nc-date">09 · 2025</div><div class="nc-text">🏆 <strong>Best Paper Award</strong> at AIiH 2025 in Cambridge, with a €500 Springer prize, for the CLAIM diffusion framework. <a href="https://link.springer.com/chapter/10.1007/978-3-032-00652-3_20" target="_blank" rel="noopener noreferrer">Paper ↗</a></div></div>
+      <div class="nc"><div class="nc-date">09 · 2025</div><div class="nc-text">🎤 Presented two works on multimodal cardiac AI at the <strong>UK Multimodal AI Workshop</strong> at the Barbican Centre, London.</div></div>
+      <div class="nc"><div class="nc-date">06 · 2025</div><div class="nc-text">🔬 Joined as <strong>Research Assistant</strong> on a Royal Society funded project, developing multimodal AI pipelines for cardiac scar mapping at Sheffield.</div></div>
+      <div class="nc"><div class="nc-date">07 · 2024</div><div class="nc-text">📚 Attended <strong>MedICSS</strong>, the Medical Image Computing Summer School at UCL London, a week-long intensive on state-of-the-art methods in the field.</div></div>
+    </div><!-- /news-feed -->
+  </div>
+</section>
+
+<!-- PHOTOS -->
+  <div class="inner">
+    <h2 class="s-title rev">Events &amp; Conferences</h2>
+    <div class="photo-grid rev">
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/event1.jpg" alt="AIiH 2025 Best Paper Award"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">Best event photo<div class="ph-ph-path">images/events/event1.jpg</div></div></div>
+        <div class="ph-cap">AIiH 2025 · Cambridge · Best Paper Award</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/event2.jpg" alt="IEEE ISBI 2026"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/event2.jpg</div></div>
+        <div class="ph-cap">IEEE ISBI 2026 · London · Oral</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/event3.jpg" alt="CinC 2024"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/event3.jpg</div></div>
+        <div class="ph-cap">CinC 2024 · Karlsruhe, Germany</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/event4.jpg" alt="MedICSS UCL"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/event4.jpg</div></div>
+        <div class="ph-cap">MedICSS · UCL London · 2024</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/event5.jpg" alt="UK Multimodal AI Workshop"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/event5.jpg</div></div>
+        <div class="ph-cap">UK Multimodal AI Workshop · Barbican, London · 2025</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/viva.jpg" alt="Farheen Ramzan after passing her PhD viva"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/viva.jpg</div></div>
+        <div class="ph-cap">Viva passed · University of Sheffield · 2026</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/panel.jpg" alt="Farheen Ramzan speaking as an AI panelist"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/panel.jpg</div></div>
+        <div class="ph-cap">AI Panelist · Sheffield Women in Technology · 2026</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/poster.jpg" alt="Farheen Ramzan presenting a poster at the UK Multimodal AI Workshop"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/poster.jpg</div></div>
+        <div class="ph-cap">Poster Presentation · UK Multimodal AI Workshop · Barbican, London · 2025</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/e7.jpeg" alt="Farheen Ramzan presenting the CLAIM poster at the Insigneo Showcase"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/e7.jpeg</div></div>
+        <div class="ph-cap">Poster Presentation · Insigneo Showcase · University of Sheffield · 2025</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/e8.jpeg" alt="Farheen Ramzan giving an oral presentation of CLAIM at the Engineering Researcher Symposium"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/e8.jpeg</div></div>
+        <div class="ph-cap">Oral Presentation · Engineering Researcher Symposium · University of Sheffield · 2025</div>
+      </div>
+      <div class="ph-slot">
+        <img loading="lazy" src="images/events/e6.jpg" alt="Farheen Ramzan receiving the Gold Medal at the UET Lahore convocation"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="ph-ph" style="display:none"><div class="ph-ph-icon">📷</div><div class="ph-ph-text">images/events/e6.jpg</div></div>
+        <div class="ph-cap">Gold Medal · 23rd Convocation · UET Lahore · 2016</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE -->
+<section class="section tinted" id="service">
+  <div class="inner">
+
+    <!-- Service -->
+    <h2 class="col-title rev" style="margin-bottom:var(--s3)">Service</h2>
+    <ul class="svc-list rev">
+      <li class="svc-item"><span class="svc-check">✓</span><span>Graduate Teaching Assistant — University of Sheffield (Feb 2023 – May 2024)</span></li>
+      <li class="svc-item"><span class="svc-check">✓</span><span>Supervised 4 MSc and 15+ BSc students across Sheffield and UET Lahore</span></li>
+      <li class="svc-item"><span class="svc-check">✓</span><span>Secretary, Board of Studies — Department of Computer Science, UET Lahore (2020–2022)</span></li>
+      <li class="svc-item"><span class="svc-check">✓</span><span>AI Panelist — Sheffield Women in Technology (May 2026)</span></li>
+      <li class="svc-item"><span class="svc-check">✓</span><span>IEEE Student Member &nbsp;·&nbsp; Insigneo Institute &nbsp;·&nbsp; Sheffield Women in CS Society</span></li>
+    </ul>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact" id="contact" style="scroll-margin-top:54px">
+  <div class="contact-inner">
+    <div class="rev">
+      <h2 class="contact-hl">Let's work<br><em>together.</em></h2>
+      <p class="contact-sub">I am looking for a postdoctoral position in medical imaging AI, generative models for healthcare, or cardiovascular AI. I am particularly interested in groups with strong clinical partnerships and an interest in making methods that hold up outside the lab. I am open to positions across Europe, with a particular interest in Germany, the Netherlands, Ireland and the UK.</p>
+      <a class="contact-cta" href="files/FarheenRamzan_CV.pdf" target="_blank" rel="noopener noreferrer">Download full CV →</a>
+    </div>
+    <div class="clinks rev d2">
+      <a class="cli" href="mailto:farheen.ramzan12@gmail.com"><span class="cli-ico">✉</span><div><span class="cli-label">Email</span><span class="cli-val">farheen.ramzan12@gmail.com</span></div></a>
+      <a class="cli" href="https://scholar.google.com/citations?user=PlJD884AAAAJ&hl=en" target="_blank" rel="noopener noreferrer"><span class="cli-ico">🎓</span><div><span class="cli-label">Google Scholar</span><span class="cli-val">892 citations · h-index 6 · 11 publications</span></div></a>
+      <a class="cli" href="https://www.linkedin.com/in/farheen-ramzan-840a6497" target="_blank" rel="noopener noreferrer"><span class="cli-ico">🔗</span><div><span class="cli-label">LinkedIn</span><span class="cli-val">linkedin.com/in/farheen-ramzan-840a6497</span></div></a>
+      <a class="cli" href="https://github.com/farheenjabeen" target="_blank" rel="noopener noreferrer"><span class="cli-ico">💻</span><div><span class="cli-label">GitHub</span><span class="cli-val">github.com/farheenjabeen</span></div></a>
+      <a class="cli" href="https://www.youtube.com/@farheenramzan2863" target="_blank" rel="noopener noreferrer"><span class="cli-ico">▶</span><div><span class="cli-label">YouTube</span><span class="cli-val">youtube.com/@farheenramzan2863</span></div></a>
+      <a class="cli" href="https://orcid.org/0000-0002-1051-6188" target="_blank" rel="noopener noreferrer"><span class="cli-ico">🆔</span><div><span class="cli-label">ORCID</span><span class="cli-val">orcid.org/0000-0002-1051-6188</span></div></a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>Farheen Ramzan · PhD Graduate · University of Sheffield</p>
+  <p>Updated June 2026</p>
+</footer>
+
+<script>
+// Reveal on scroll
+const revIO = new IntersectionObserver(
+  entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') }),
+  { threshold: 0.07 }
+);
+document.querySelectorAll('.rev').forEach(el => revIO.observe(el));
+
+// Active nav link
+const secs = document.querySelectorAll('section[id], div#contact');
+const navAs = document.querySelectorAll('.nav-links a');
+const navIO = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    if(e.isIntersecting)
+      navAs.forEach(a => a.classList.toggle('on', a.getAttribute('href')==='#'+e.target.id));
+  }),
+  { rootMargin: '-30% 0px -60% 0px' }
+);
+secs.forEach(s => navIO.observe(s));
+
+// Burger / drawer
+const burg = document.getElementById('burg');
+const drw  = document.getElementById('drw');
+burg.addEventListener('click', () => {
+  const open = drw.classList.toggle('open');
+  burg.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+drw.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    drw.classList.remove('open');
+    burg.setAttribute('aria-expanded', false);
+    document.body.style.overflow = '';
+  });
+});
+// Teaching project filters
+const tFilters = document.querySelectorAll('.tfilter');
+const tProjs = document.querySelectorAll('.proj');
+tFilters.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tFilters.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.getAttribute('data-filter');
+    tProjs.forEach(p => {
+      const tags = p.getAttribute('data-tags') || '';
+      const show = (f === 'all') || tags.split(' ').includes(f);
+      p.classList.toggle('hidden', !show);
+    });
+  });
+});
+
+// Poster lightbox
+function openPoster(src){
+  const lb=document.getElementById('posterLightbox');
+  document.getElementById('posterLightboxImg').src=src;
+  lb.classList.add('open');
+}
+function closePoster(){
+  document.getElementById('posterLightbox').classList.remove('open');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePoster();});
+</script>
+<div class="lightbox" id="posterLightbox" onclick="closePoster()">
+  <button class="lightbox-close" onclick="closePoster()" aria-label="Close">✕</button>
+  <img id="posterLightboxImg" src="" alt="Poster, full size"/>
+</div>
+</body>
+</html>

@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="CLAIM: Clinically-Guided LGE Augmentation for Realistic and Diverse Myocardial Scar Synthesis and Segmentation. Best Paper Award AIiH 2025. Farheen Ramzan."/>
+<meta property="og:title" content="CLAIM: Clinically-Guided Cardiac Scar Synthesis, Farheen Ramzan"/>
+<meta property="og:description" content="Best Paper Award AIiH 2025. +8.4% Dice on NHS out-of-domain data. AHA-17 conditioned diffusion synthesis."/>
+<meta property="og:type" content="article"/>
+<title>CLAIM · Farheen Ramzan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=Lora:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:54px}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+:root{
+  --ink:#0D0D0D;--body:#363636;--muted:#6B6B6B;--faint:#ABABAB;
+  --white:#FFFFFF;--off:#F6F4F0;--warm:#FAF8F4;--line:#E6E4DE;--line2:#CCC9C0;
+  --accent:#A06810;--accent-s:#FBF6EC;--accent-b:rgba(160,104,16,0.15);
+  --navy:#1D2E4F;--green:#185C35;--green-s:#EAF5EE;--green-b:rgba(24,92,53,0.12);
+  --red:#8B1A1A;--red-s:#FDF0F0;--red-b:rgba(139,26,26,0.1);
+  --f-xs:0.6875rem;--f-sm:0.8125rem;--f-md:0.9375rem;--f-lg:1.0625rem;
+  --f-2xl:1.875rem;--f-3xl:2.75rem;
+  --sans:'Plus Jakarta Sans',system-ui,sans-serif;
+  --serif:'Lora',Georgia,serif;--mono:'JetBrains Mono',monospace;
+  --max:940px;--gutter:clamp(1.25rem,4vw,2.75rem);
+  --s1:.5rem;--s2:1rem;--s3:1.5rem;--s4:2rem;--s5:3rem;--s6:4.5rem;
+}
+body{font-family:var(--sans);font-size:var(--f-md);line-height:1.7;color:var(--body);background:var(--white);overflow-x:hidden}
+
+.rev{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.rev.in{opacity:1;transform:none}
+.rev.d1{transition-delay:.09s}.rev.d2{transition-delay:.18s}.rev.d3{transition-delay:.28s}.rev.d4{transition-delay:.4s}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;height:54px;display:flex;align-items:center;
+  padding:0 var(--gutter);background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);gap:var(--s2)}
+.nav-back{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:6px;transition:color .15s}
+.nav-back:hover{color:var(--ink)}
+.nav-name{font-size:var(--f-sm);font-weight:700;color:var(--ink);margin-left:auto}
+
+/* HERO */
+.hero{max-width:calc(var(--max) + var(--gutter)*2);margin:0 auto;padding:var(--s6) var(--gutter) var(--s5)}
+.hero-inner{display:grid;grid-template-columns:1fr auto;gap:var(--s5);align-items:start}
+.hero-eyebrow{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--s2)}
+.hero-name{font-size:clamp(3.5rem,10vw,6.5rem);font-weight:800;color:var(--ink);letter-spacing:-.05em;line-height:.88;margin-bottom:var(--s2)}
+.hero-full{font-family:var(--serif);font-style:italic;font-size:clamp(.95rem,2vw,1.2rem);color:var(--muted);line-height:1.5;max-width:560px;margin-bottom:var(--s3)}
+.hero-authors{font-size:var(--f-sm);color:var(--body);line-height:2;margin-bottom:var(--s2)}
+.hero-authors .me{color:var(--accent);font-weight:700}
+.hero-authors sup{font-size:.65em;color:var(--accent);vertical-align:super}
+.hero-affil{font-family:var(--mono);font-size:var(--f-xs);color:var(--muted);letter-spacing:.02em;margin-bottom:var(--s3);line-height:1.9}
+.hero-affil sup{color:var(--accent);font-size:.7em;vertical-align:super;font-weight:600;margin-right:1px}
+.hero-venue{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.06em;text-transform:uppercase;background:var(--accent-s);color:var(--accent);
+  border:1px solid var(--accent-b);padding:7px 14px;margin-bottom:var(--s3)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.05em;text-transform:uppercase;padding:11px 20px;border:1px solid;transition:all .15s;font-weight:500}
+.btn-solid{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.btn-solid:hover{background:#2a2a2a}
+.btn-ghost{background:var(--white);color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--off)}
+.btn-award{background:var(--accent-s);color:var(--accent);border-color:var(--accent-b)}
+.btn-award:hover{background:rgba(160,104,16,0.12)}
+
+/* Award badge */
+.award-badge{background:var(--ink);padding:var(--s3) var(--s3) var(--s4);min-width:190px;
+  position:relative;overflow:hidden;flex-shrink:0}
+.award-badge::before{content:'';position:absolute;top:-18px;right:-18px;width:72px;height:72px;
+  background:var(--accent);border-radius:50%;opacity:.16;animation:glow 3.5s ease-in-out infinite}
+@keyframes glow{0%,100%{transform:scale(1);opacity:.16}50%{transform:scale(1.6);opacity:.07}}
+.award-ico{font-size:1.8rem;display:block;margin-bottom:10px}
+.award-tag{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px}
+.award-title{font-size:var(--f-sm);font-weight:700;color:var(--white);line-height:1.4;margin-bottom:5px}
+.award-sub{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.04em;display:block}
+
+/* TL;DR */
+.tldr{background:var(--navy);padding:var(--s3) var(--gutter)}
+.tldr-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:var(--s3);align-items:center}
+.tldr-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);white-space:nowrap}
+.tldr-txt{font-family:var(--serif);font-style:italic;font-size:var(--f-lg);color:rgba(255,255,255,.9);line-height:1.55}
+.tldr-txt strong{font-family:var(--sans);font-style:normal;font-weight:700;color:var(--accent)}
+
+/* PUNCHLINE STRIP */
+.punchline{background:var(--accent);padding:var(--s4) var(--gutter)}
+.punchline-inner{max-width:var(--max);margin:0 auto;text-align:center}
+.punchline p{font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.15rem,3vw,1.65rem);color:var(--white);line-height:1.55}
+.punchline em{font-style:normal;font-weight:700;text-decoration:underline;
+  text-decoration-color:rgba(255,255,255,0.4);text-underline-offset:4px}
+
+/* SECTIONS */
+.section{border-top:1px solid var(--line);padding:var(--s6) var(--gutter)}
+.section.off{background:var(--off)}
+.section.ink{background:var(--ink);border-color:transparent}
+.inner{max-width:var(--max);margin:0 auto}
+.s-eye{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--s2)}
+.s-title{font-size:var(--f-2xl);font-weight:800;color:var(--ink);letter-spacing:-.025em;line-height:1.1;margin-bottom:var(--s4)}
+.ink .s-title{color:var(--white)}
+.ink .s-eye{color:var(--accent)}
+.prose{font-size:var(--f-md);color:var(--body);line-height:1.85}
+.prose p+p{margin-top:var(--s3)}
+.prose strong{color:var(--ink);font-weight:600}
+.ink .prose{color:rgba(255,255,255,.8)}
+.ink .prose strong{color:var(--white)}
+
+/* PROSE + IMAGE SIDE BY SIDE */
+.prose-with-img{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);align-items:center}
+.prose-with-img img{width:100%;display:block;background:#000}
+@media(max-width:700px){.prose-with-img{grid-template-columns:1fr}}
+
+/* FIGURE SLOTS */
+.fig-slot{border:1.5px dashed var(--line2);background:var(--off);overflow:hidden;margin:var(--s3) 0}
+.ink .fig-slot,.hook .fig-slot{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)}
+.fig-inner{padding:var(--s5) var(--s3);text-align:center}
+.fig-file{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.08em;text-transform:uppercase;
+  background:var(--ink);color:var(--accent);padding:4px 10px;display:inline-block;margin-bottom:var(--s2)}
+.ink .fig-file{background:rgba(255,255,255,.1)}
+.fig-src{font-family:var(--mono);font-size:var(--f-xs);color:var(--faint);letter-spacing:.03em;margin-bottom:10px}
+.ink .fig-src,.hook .fig-src{color:rgba(255,255,255,.25)}
+.fig-desc{font-size:var(--f-sm);color:var(--muted);line-height:1.6;max-width:480px;margin:0 auto}
+.ink .fig-desc,.hook .fig-desc{color:rgba(255,255,255,.4)}
+.fig-cap{font-family:var(--serif);font-style:italic;font-size:var(--f-sm);color:var(--muted);
+  line-height:1.65;text-align:center;padding:0 var(--s3);margin-top:12px}
+.ink .fig-cap{color:rgba(255,255,255,.4)}
+
+/* HOOK */
+.hook{background:var(--navy);border-top:none;padding:var(--s6) var(--gutter)}
+.hook-inner{max-width:var(--max);margin:0 auto;text-align:center}
+.hook-q{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;color:var(--white);
+  letter-spacing:-.03em;line-height:1.1;margin-bottom:var(--s3);max-width:700px;margin-left:auto;margin-right:auto}
+.hook-sub{font-family:var(--serif);font-style:italic;font-size:var(--f-lg);
+  color:rgba(255,255,255,.55);margin-bottom:var(--s5);line-height:1.6;max-width:560px;margin-left:auto;margin-right:auto}
+/* GROUP FLIP STRIP */
+.group-strip{display:grid;grid-template-columns:1fr 1px 1fr;border:1px solid rgba(255,255,255,.1);
+  margin:var(--s4) 0;overflow:hidden}
+.group-divider{background:rgba(255,255,255,.1)}
+.group-card{padding:var(--s4) var(--s3);text-align:center;display:flex;flex-direction:column;
+  align-items:center;gap:12px}
+.group-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.35)}
+.group-flip{perspective:600px;height:72px;width:200px;flex-shrink:0}
+.group-flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform 1.1s cubic-bezier(0.4,0,0.2,1)}
+.group-flip.flipped .group-flip-inner{transform:rotateX(180deg)}
+.group-face{position:absolute;inset:0;backface-visibility:hidden;display:flex;
+  align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08)}
+.group-face.front{background:rgba(255,255,255,.03)}
+.group-face.back{transform:rotateX(180deg)}
+.q-mark{font-family:var(--mono);font-size:2rem;font-weight:700;color:rgba(255,255,255,.18);
+  letter-spacing:.2em}
+.answer-tag{font-family:var(--mono);font-size:1.05rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase}
+.group-face.back.synthetic{background:rgba(160,104,16,.12);border-color:var(--accent-b)}
+.group-face.back.synthetic .answer-tag{color:var(--accent)}
+.group-face.back.real{background:rgba(24,92,53,.12);border-color:rgba(24,92,53,.25)}
+.group-face.back.real .answer-tag{color:#4DAA72}
+.group-note{font-size:var(--f-xs);color:rgba(255,255,255,.32);line-height:1.55;max-width:200px}
+
+/* ANSWER REVEAL — animated in by JS, not .rev */
+.hook-reveal{background:var(--accent-s);border:1px solid var(--accent-b);padding:var(--s3) var(--s4);
+  display:inline-block;text-align:left;max-width:620px;
+  opacity:0;transform:translateY(18px);
+  transition:opacity .65s ease,transform .65s ease}
+.hook-reveal.revealed{opacity:1;transform:none}
+.hook-reveal-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);display:block;margin-bottom:6px}
+.hook-reveal-lbl::before{content:'🔓 '}
+.hook-reveal-txt{font-size:var(--f-md);color:var(--ink);line-height:1.7}
+
+@media(max-width:500px){
+  .group-strip{grid-template-columns:1fr;grid-template-rows:1fr 1px 1fr}
+  .group-divider{height:1px;width:100%}
+  .group-flip{width:160px}
+}
+
+/* PROBLEM STATS */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:var(--s4)}
+.stat-card{background:var(--white);padding:var(--s3);transition:background .15s}
+.stat-card:hover{background:var(--warm)}
+.stat-ico{font-size:1.4rem;margin-bottom:var(--s1)}
+.stat-val{font-size:var(--f-3xl);font-weight:800;color:var(--ink);letter-spacing:-.04em;line-height:1;margin-bottom:5px}
+.stat-val sub{font-size:var(--f-md);font-weight:500;color:var(--muted);vertical-align:middle;letter-spacing:0}
+.stat-tag{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.stat-note{font-size:var(--f-xs);color:var(--muted);line-height:1.55}
+
+/* METHOD COMPARE */
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:var(--s4)}
+.mc-col{padding:var(--s4)}
+.mc-col.bad{background:var(--red-s)}
+.mc-col.good{background:var(--green-s)}
+.mc-head{display:flex;align-items:center;gap:10px;margin-bottom:var(--s3);padding-bottom:var(--s3);border-bottom:1px solid var(--line)}
+.mc-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.mc-col.bad .mc-lbl{color:var(--red)}
+.mc-col.good .mc-lbl{color:var(--green)}
+.mc-list{display:flex;flex-direction:column;gap:14px}
+.mc-item{display:flex;align-items:flex-start;gap:10px;font-size:var(--f-sm);line-height:1.6}
+.mc-dot{flex-shrink:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:14px;margin-top:1px}
+.mc-col.bad .mc-dot{background:var(--red-b);color:var(--red)}
+.mc-col.good .mc-dot{background:var(--green-b);color:var(--green)}
+
+/* SMILE STEPS */
+.smile-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--line);
+  border:1px solid var(--line);margin-top:var(--s4)}
+.smile-step{background:var(--white);padding:var(--s3);position:relative}
+.smile-step:nth-child(1){border-top:3px solid var(--navy)}
+.smile-step:nth-child(2){border-top:3px solid var(--accent)}
+.smile-step:nth-child(3){border-top:3px solid var(--accent)}
+.smile-step:nth-child(4){border-top:3px solid var(--navy)}
+.smile-step:not(:last-child)::after{content:'→';position:absolute;right:-11px;top:48%;
+  transform:translateY(-50%);color:var(--accent);font-size:.95rem;z-index:2;font-weight:700}
+.step-n{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block}
+.step-name{font-size:var(--f-sm);font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:6px}
+.step-desc{font-size:var(--f-xs);color:var(--muted);line-height:1.65}
+
+/* RESULTS */
+.result-head{display:flex;align-items:flex-start;gap:var(--s4);margin-bottom:var(--s4);flex-wrap:wrap}
+.result-num{font-family:var(--mono);font-size:clamp(3.5rem,9vw,6rem);font-weight:800;
+  color:var(--accent);letter-spacing:-.05em;line-height:.88}
+.result-unit{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-top:8px}
+.result-copy{font-size:var(--f-lg);color:var(--ink);line-height:1.7;max-width:480px;padding-top:8px}
+.result-copy strong{color:var(--accent);font-weight:700}
+
+/* RESULTS TABLE */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line)}
+table.res{border-collapse:collapse;width:100%;font-size:var(--f-sm);min-width:520px}
+table.res th{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);background:var(--off);padding:10px 14px;border-bottom:1px solid var(--line);font-weight:500;text-align:left}
+table.res .th-sub{font-size:9px;letter-spacing:.02em;text-transform:none;font-weight:400;color:var(--faint);display:block;margin-top:2px}
+table.res td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--body)}
+table.res tbody tr:last-child td{border-bottom:none}
+table.res td:first-child{color:var(--ink)}
+table.res .best{color:var(--accent);font-weight:700;font-family:var(--mono)}
+table.res .num{font-family:var(--mono)}
+table.res .delta{font-size:.75em;color:var(--muted);font-weight:400}
+table.res .ours td{background:rgba(160,104,16,.04)}
+table.res .ours td:first-child{font-weight:700}
+.tbl-note{font-family:var(--mono);font-size:var(--f-xs);color:var(--faint);margin-top:10px;letter-spacing:.02em}
+
+/* NHS BOX */
+.nhs-box{background:var(--ink);padding:var(--s4);margin-top:var(--s4);
+  display:grid;grid-template-columns:auto 1fr;gap:var(--s3);align-items:start;
+  border-left:3px solid var(--accent)}
+.nhs-ico{font-size:1.6rem}
+.nhs-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px;display:block}
+.nhs-txt{font-size:var(--f-sm);color:rgba(255,255,255,.82);line-height:1.7}
+.nhs-txt strong{color:var(--white)}
+
+/* QUALITATIVE PAIR */
+.qual-pair{display:flex;flex-direction:column;gap:var(--s5);margin-top:var(--s4)}
+.qual-pair>div{max-width:820px;margin-left:auto;margin-right:auto;width:100%}
+.ink img{outline:1px solid rgba(255,255,255,0.08)}
+
+/* JOINT GRID */
+.joint-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);margin-top:var(--s4);align-items:start}
+
+/* CONTRIBUTIONS */
+.contrib-list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:var(--s4)}
+.contrib{background:var(--white);display:grid;grid-template-columns:72px 1fr;transition:background .15s}
+.contrib:hover{background:var(--warm)}
+.contrib-n{font-family:var(--mono);font-size:3rem;font-weight:700;color:var(--accent);
+  line-height:1;padding:var(--s3);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;letter-spacing:-.04em}
+.contrib-ico{font-size:1.4rem;line-height:1}
+.contrib-body{padding:var(--s3)}
+.contrib-title{font-size:var(--f-md);font-weight:700;color:var(--ink);margin-bottom:6px}
+.contrib-desc{font-size:var(--f-sm);color:var(--body);line-height:1.7}
+
+/* HIGHLIGHT CHIP */
+.hl{background:var(--accent-s);color:var(--accent);padding:1px 5px;
+  font-weight:600;border-radius:2px;white-space:nowrap}
+.hl-navy{background:var(--navy-s);color:var(--navy);padding:1px 5px;
+  font-weight:600;border-radius:2px;white-space:nowrap}
+
+/* ACKNOWLEDGEMENTS */
+.ack-row{display:flex;align-items:center;gap:var(--s3);flex-wrap:nowrap;margin-top:var(--s3);overflow-x:auto}
+.ack-logo{height:100px;display:flex;align-items:center;justify-content:center;
+  background:var(--white);border:1px solid var(--line);padding:14px 22px;flex-shrink:0}
+.ack-logo img{height:100%;width:auto;display:block;object-fit:contain;max-width:180px}
+.ack-logo-name{font-family:var(--mono);font-size:var(--f-xs);color:var(--muted);white-space:nowrap}
+.ack-divider{width:1px;height:80px;background:var(--line);flex-shrink:0}
+
+/* BIBTEX */
+.bibtex{background:var(--ink);padding:var(--s3);position:relative;overflow-x:auto;margin-top:var(--s3)}
+.bibtex pre{font-family:var(--mono);font-size:var(--f-xs);color:rgba(255,255,255,.82);line-height:1.75;white-space:pre}
+.bib-copy{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);
+  padding:6px 11px;cursor:pointer;transition:all .15s}
+.bib-copy:hover{background:rgba(160,104,16,.25);color:var(--accent)}
+
+/* FOOTER */
+.footer{background:var(--ink);padding:var(--s4) var(--gutter);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s2)}
+.footer a{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.footer p{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:rgba(255,255,255,.22)}
+
+/* RESPONSIVE */
+@media(max-width:820px){
+  .hero-inner{grid-template-columns:1fr}
+  .award-badge{display:none}
+  .tldr-inner{grid-template-columns:1fr}
+  .tldr-lbl{display:none}
+  .mc-grid{grid-template-columns:1fr}
+  .smile-steps{grid-template-columns:1fr 1fr}
+  .smile-step:not(:last-child)::after{display:none}
+  .stat-row{grid-template-columns:1fr}
+  .joint-grid{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .smile-steps{grid-template-columns:1fr}
+  .contrib{grid-template-columns:1fr}
+  .contrib-n{border-right:none;border-bottom:1px solid var(--line);
+    justify-content:flex-start;font-size:1.5rem;padding:var(--s2) var(--s3)}
+  .btns{flex-direction:column;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+  .rev{opacity:1;transform:none;transition:none}
+}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../index.html#publications">← All work</a>
+  <span class="nav-name">Farheen Ramzan</span>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner rev">
+    <div>
+      <p class="hero-eyebrow">Project · Generative AI · Cardiac Imaging</p>
+      <h1 class="hero-name">CLAIM</h1>
+      <p class="hero-full">Clinically-Guided LGE Augmentation for Realistic and Diverse Myocardial Scar Synthesis and Segmentation</p>
+
+      <p class="hero-authors">
+        <span class="me">Farheen Ramzan</span><sup>1,2</sup>,
+        Yusuf Kiberu<sup>3</sup>,
+        Nikesh Jathanna<sup>3,4</sup>,
+        Shahnaz Jamil-Copley<sup>3,4</sup>,
+        Richard H. Clayton<sup>1,2</sup>,
+        Chen (Cherise) Chen<sup>1,2</sup>
+      </p>
+      <p class="hero-affil">
+        <sup>1</sup> School of Computer Science, University of Sheffield &nbsp;&nbsp;
+        <sup>2</sup> Insigneo Institute for in-silico Medicine, University of Sheffield<br>
+        <sup>3</sup> Department of Cardiology, Nottingham University Hospitals NHS Trust &nbsp;&nbsp;
+        <sup>4</sup> School of Medicine, University of Nottingham
+      </p>
+
+      <div class="hero-venue">Springer LNCS 16038 · AIiH 2025 · pp. 279–292</div>
+      <div class="btns">
+        <a class="btn btn-solid" href="https://link.springer.com/chapter/10.1007/978-3-032-00652-3_20" target="_blank" rel="noopener">📄 Paper</a>
+        <a class="btn btn-ghost" href="https://arxiv.org/abs/2506.15549" target="_blank" rel="noopener">arXiv</a>
+        <a class="btn btn-ghost" href="https://github.com/farheenjabeen/CLAIM-Scar-Synthesis" target="_blank" rel="noopener">💻 Code</a>
+        <a class="btn btn-award" href="https://aiih.cc/awards-2025/" target="_blank" rel="noopener">🏆 Best Paper Award</a>
+      </div>
+    </div>
+    <div class="award-badge">
+      <span class="award-ico">🏆</span>
+      <span class="award-tag">Best Paper Award</span>
+      <span class="award-title">AIiH 2025<br>Cambridge, UK</span>
+      <span class="award-sub">Springer LNCS · €500 Prize</span>
+    </div>
+  </div>
+</header>
+
+<!-- TL;DR -->
+<div class="tldr rev">
+  <div class="tldr-inner">
+    <span class="tldr-lbl">TL;DR</span>
+    <p class="tldr-txt">We built a diffusion model that uses <strong>clinical heart anatomy</strong> as a conditioning signal, so synthetic scars are placed only where real scars physiologically can be. The result is a segmentation model that generalises to <strong>NHS patient data it has never seen.</strong></p>
+  </div>
+</div>
+
+<!-- §1 CAN YOU TELL WHICH IS SYNTHETIC -->
+<div class="hook">
+  <div class="hook-inner">
+    <h2 class="hook-q rev">Can You Tell Which Is Synthetic?</h2>
+    <p class="hook-sub rev d1">One of these groups of cardiac MRI scans was generated by CLAIM. Take a look.</p>
+
+    <div class="fig-slot rev d2" data-img="images/claim_spot_synthetic.png" data-alt="Real vs synthetic LGE scans comparison">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_spot_synthetic.png</span>
+        <p class="fig-src">Export from Slide 8 — "Spot the Synthetic Images?" — Group A vs Group B</p>
+        <p class="fig-desc">Group A and Group B — two sets of cardiac LGE scans. One group is real. The other was generated entirely by CLAIM.</p>
+      </div>
+    </div>
+
+    <!-- Group A / B flip reveal -->
+    <div class="group-strip rev d3" id="groupStrip">
+      <div class="group-card">
+        <span class="group-lbl">Group A</span>
+        <div class="group-flip" id="flipA">
+          <div class="group-flip-inner">
+            <div class="group-face front"><span class="q-mark">???</span></div>
+            <div class="group-face back synthetic"><span class="answer-tag">Synthetic</span></div>
+          </div>
+        </div>
+        <p class="group-note">Generated by CLAIM's conditional diffusion model</p>
+      </div>
+      <div class="group-divider"></div>
+      <div class="group-card">
+        <span class="group-lbl">Group B</span>
+        <div class="group-flip" id="flipB">
+          <div class="group-flip-inner">
+            <div class="group-face front"><span class="q-mark">???</span></div>
+            <div class="group-face back real"><span class="answer-tag">Real</span></div>
+          </div>
+        </div>
+        <p class="group-note">Real LGE-CMR from NHS patients</p>
+      </div>
+    </div>
+
+    <!-- Answer reveal — unlocks after cards flip -->
+    <div class="hook-reveal" id="hookReveal">
+      <span class="hook-reveal-lbl">The answer</span>
+      <p class="hook-reveal-txt">CLAIM-generated LGE scans are <strong>visually indistinguishable from real acquisitions.</strong> They are anatomically coherent, correctly located, and diverse in morphology. That is exactly the point.</p>
+    </div>
+  </div>
+</div>
+
+<!-- §2 WHY SCAR IS HARD -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">The clinical problem</p>
+    <h2 class="s-title rev">Why scar is so hard to see and so hard to label</h2>
+    <div class="prose-with-img rev d1">
+      <img src="images/claim_lge_mri.png" alt="Late Gadolinium Enhancement MRI short axis slice annotated with Left Ventricle, Right Ventricle and Myocardium"/>
+      <div class="prose">
+        <p>Late Gadolinium Enhancement (LGE) MRI is the gold standard for visualising myocardial scar. Infarcted tissue accumulates gadolinium contrast, making it light up brightly against healthy muscle in the scan. Getting scar localisation right matters enormously: it directly guides <span class="hl">arrhythmia risk stratification</span>, <span class="hl">ICD implantation</span>, and <span class="hl">ablation planning</span>.</p>
+        <p>But the imaging challenge is real. Scar boundaries are poorly defined, soft-tissue contrast is low, and every patient looks different in terms of size, shape, location, and transmurality of the infarct. Even experienced cardiologists spend significant time on each case. Building large labelled datasets at scale is simply not feasible.</p>
+      </div>
+    </div>
+
+    <div class="stat-row rev d2">
+      <div class="stat-card">
+        <div class="stat-ico">📊</div>
+        <div class="stat-val">67<sub> cases</sub></div>
+        <div class="stat-tag">Pathological in EMIDEC</div>
+        <div class="stat-note">EMIDEC, the public dataset used in this work, contains only <span class="hl">67 pathological LGE scans</span> with a mean scar volume of 23.68 ± 15.81 ml. Too small on its own for robust deep learning generalisation.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico">⏱</div>
+        <div class="stat-val">45<sub>+ min</sub></div>
+        <div class="stat-tag">Per annotation</div>
+        <div class="stat-note">Expert delineation of scar from LGE-CMR requires a cardiologist, careful windowing, and substantial time per case. That makes large labelled datasets expensive to build.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico">🔒</div>
+        <div class="stat-val">0<sub> sharing</sub></div>
+        <div class="stat-tag">Cross-centre access</div>
+        <div class="stat-note">Privacy and security constraints prevent dataset sharing across centres. Every lab works in isolation with its own small collection, which only reinforces the scarcity problem.</div>
+      </div>
+    </div>
+
+    <div class="fig-slot rev d3" style="max-width:660px;margin:var(--s4) auto" data-img="images/claim_spot_scar.png" data-alt="LGE short-axis slice showing scar detection challenge">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_spot_scar.png</span>
+        <p class="fig-src">Export from Slide 5 — "Can you spot the scar?" — LGE short-axis slice</p>
+        <p class="fig-desc">A real LGE cardiac MRI short-axis slice showing the segmentation challenge: heterogeneous scar appearance, poorly defined boundaries, and low soft-tissue contrast.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d3">A real LGE cardiac MRI short-axis slice. The scar is present but not obvious. Finding its precise boundary requires clinical training, careful windowing, and considerable time per case. AI models trained only on such limited data generalise poorly.</p>
+  </div>
+</section>
+
+<!-- PUNCHLINE -->
+<div class="punchline rev">
+  <div class="punchline-inner">
+    <p>Scar data is scarce. But with CLAIM, AI doesn't have to be <em>scarred</em> by scarcity.</p>
+  </div>
+</div>
+
+<!-- §3 WHAT EXISTING METHODS GET WRONG -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">The gap</p>
+    <h2 class="s-title rev">What existing synthesis methods get wrong</h2>
+    <div class="prose rev d1">
+      <p>Conditional diffusion models for medical pathology synthesis have made real progress in recent years. But for cardiac scar, which is small, rare, and anatomically constrained, existing methods share three failure modes that matter:</p>
+    </div>
+
+    <div class="mc-grid rev d2">
+      <div class="mc-col bad">
+        <div class="mc-head">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#8B1A1A" stroke-width="1.5"/><path d="M5.5 5.5l7 7M12.5 5.5l-7 7" stroke="#8B1A1A" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="mc-lbl">Prior synthesis methods</span>
+        </div>
+        <div class="mc-list">
+          <div class="mc-item">
+            <span class="mc-dot">👻</span>
+            <span><strong>Data hallucination.</strong> Unintended alterations corrupt background regions. Non-scar anatomy is damaged by generation artifacts, which directly harms downstream segmentation quality.</span>
+          </div>
+          <div class="mc-item">
+            <span class="mc-dot">⚖️</span>
+            <span><strong>Biased diversity.</strong> Mask generation samples from training data statistics, inheriting their imbalances. Rare scar morphologies and locations stay consistently underrepresented.</span>
+          </div>
+          <div class="mc-item">
+            <span class="mc-dot">🚫</span>
+            <span><strong>No anatomical grounding.</strong> Generated scars can appear anywhere in the myocardium, including physiologically impossible locations that no real infarction could produce.</span>
+          </div>
+        </div>
+      </div>
+      <div class="mc-col good">
+        <div class="mc-head">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#185C35" stroke-width="1.5"/><path d="M5 9l3 3 5-5" stroke="#185C35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="mc-lbl">CLAIM (this work)</span>
+        </div>
+        <div class="mc-list">
+          <div class="mc-item">
+            <span class="mc-dot">🛡️</span>
+            <span><strong>Background preserved.</strong> Forward-diffused background is integrated at every reverse diffusion step, so non-scar anatomy is held fixed and remains untouched throughout generation.</span>
+          </div>
+          <div class="mc-item">
+            <span class="mc-dot">🗺️</span>
+            <span><strong>Atlas-driven diversity.</strong> Scar masks are generated from the AHA-17 atlas, sampling uniformly over location, size, and texture rather than from biased training statistics.</span>
+          </div>
+          <div class="mc-item">
+            <span class="mc-dot">🫀</span>
+            <span><strong>Clinical anatomy as a hard prior.</strong> Every synthetic scar respects AHA segment boundaries and coronary territory logic. Scars land only where real scars physiologically can.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §4 SMILE -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">The core module</p>
+    <h2 class="s-title rev">SMILE: Scar Masks Incorporating cLinical knowledgE</h2>
+    <div class="prose rev d1">
+      <p>SMILE is what makes CLAIM clinically grounded. It generates scar masks from the <strong>AHA 17-segment model</strong>, the standardised clinical map that divides the left ventricular myocardium into regions defined by both anatomy and coronary territory. This standard is used in every cardiology lab worldwide. <span class="hl">To our knowledge, CLAIM is the first work to embed it inside a generative AI pipeline for cardiac scar synthesis.</span></p>
+      <p>The coronary territory logic is enforced as a hard constraint. <span class="hl-navy">LAD</span> territory covers anterior and anteroseptal segments. <span class="hl-navy">RCA</span> covers inferior and inferoseptal. <span class="hl-navy">LCx</span> covers lateral. A synthetic inferior scar will not appear in a lateral segment. Full stop.</p>
+    </div>
+
+    <div class="smile-steps rev d2">
+      <div class="smile-step">
+        <span class="step-n">Step 01 · Register</span>
+        <p class="step-name">Myocardium Fitting to AHA Atlas</p>
+        <p class="step-desc">Each subject's myocardium is registered to a template AHA-17 atlas using orientation correction, resampling, and rigid followed by non-rigid registration (fast symmetric forces demons).</p>
+      </div>
+      <div class="smile-step">
+        <span class="step-n">Step 02 · Select</span>
+        <p class="step-name">Location and Size via Adjacency Maps</p>
+        <p class="step-desc">One or more AHA segments are randomly selected from basal (1–6), middle (7–12), and apical (13–17) regions using adjacency maps to ensure coherence. Scar volume is sampled from a uniform distribution per region.</p>
+      </div>
+      <div class="smile-step">
+        <span class="step-n">Step 03 · Generate</span>
+        <p class="step-name">Textured Scar Blobs</p>
+        <p class="step-desc">3D scar blobs are generated per selected region with controlled anisotropy and porosity. Post-processing includes hole filling, Gaussian smoothing, and removal of isolated voxels for an anatomically plausible result.</p>
+      </div>
+      <div class="smile-step">
+        <span class="step-n">Step 04 · Transform</span>
+        <p class="step-name">Atlas Space to Subject Space</p>
+        <p class="step-desc">Scar masks are warped back to each subject's native anatomy using non-rigid and rigid registration, then composited onto the original myocardium. The result is ready to condition the diffusion model.</p>
+      </div>
+    </div>
+
+    <div class="fig-slot rev d3" style="margin-top:var(--s4)" data-img="images/claim_smile_module.png" data-alt="SMILE module 4-step diagram">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_smile_module.png</span>
+        <p class="fig-src">Export from Slide 13 — "SMILE: Scar Masks Incorporating cLinical knowledgE" — full 4-step diagram</p>
+        <p class="fig-desc">The SMILE pipeline: healthy myocardium to AHA-17 region selection to blob generation to synthetic scar in subject space. This is Figure 2 in the published paper.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d3">SMILE generates anatomically plausible, controllable scar masks without relying on training data distributions. This means it can cover scar patterns that real datasets consistently underrepresent.</p>
+
+    <div class="fig-slot rev d3" data-img="images/claim_aha17.png" data-alt="AHA 17-segment model with coronary territory colour-coding">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_aha17.png</span>
+        <p class="fig-src">Export from Slide 9 — AHA 17-Segment Atlas with Clinical Guidance and Standardization labels</p>
+        <p class="fig-desc">The AHA-17 bull's-eye diagram with LAD, RCA, and LCx coronary territory colour-coding and the 3D LV mesh. This is the clinical standard that CLAIM uses as its conditioning prior.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d3">The AHA 17-segment model is the standardised clinical framework for localising, reporting, and quantifying myocardial abnormalities. CLAIM is the first work to embed it directly into a generative AI training pipeline.</p>
+  </div>
+</section>
+
+<!-- §5 FULL CLAIM FRAMEWORK -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">Architecture</p>
+    <h2 class="s-title rev">The full CLAIM framework</h2>
+    <div class="prose rev d1">
+      <p>CLAIM brings SMILE together with a conditional <span class="hl-navy">DDPM-based diffusion model</span> (adapted from LeFusion) and a scar segmentation network built on <span class="hl-navy">nnUNet</span>, trained alongside the generator. SMILE creates a diverse, anatomically constrained scar mask. The diffusion model synthesises a pathological LGE image conditioned on that mask, holding the background anatomy exactly in place. The segmentation network then trains on both real and synthetic data, and its feedback drives the generator toward more meaningful and realistic scar synthesis over time.</p>
+    </div>
+
+    <div class="fig-slot rev d2" data-img="images/claim_pipeline.png" data-alt="Full CLAIM pipeline overview">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_pipeline.png</span>
+        <p class="fig-src">Export from Slide 21 — "The CLAIM Pipeline" — complete version with all components including joint training</p>
+        <p class="fig-desc">The full pipeline: AHA-17 to SMILE to Scar Mask to Diffusion Model (forward and reverse diffusion) to Synthetic Pathological LGE to Segmentation Model trained on real and synthetic datasets with joint training feedback. This is Figure 1 in the published paper.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d2">Overview of CLAIM: SMILE generates diverse scar masks from the AHA-17 atlas, the diffusion model synthesises paired LGE images, the segmentation model trains on the augmented dataset, and its feedback improves synthesis quality through joint training in CLAIM(J).</p>
+  </div>
+</section>
+
+<!-- §6 QUALITATIVE RESULTS -->
+<section class="section ink">
+  <div class="inner">
+    <p class="s-eye rev">Qualitative results</p>
+    <h2 class="s-title rev">Controllable. Diverse. Indistinguishable from real.</h2>
+    <div class="prose rev d1">
+      <p>Three questions matter for synthetic training data: <strong>does it look real?</strong> <strong>Is it anatomically plausible?</strong> <strong>Does it add variety the original training set lacks?</strong> CLAIM answers yes to all three, and the evidence is visible directly in the images below.</p>
+    </div>
+
+    <div class="fig-slot rev d2" style="max-width:800px;margin:var(--s4) auto" data-img="images/claim_3d_diversity.png" data-alt="3D and 2D scar pattern diversity from CLAIM">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_3d_diversity.png</span>
+        <p class="fig-src">Export from Slide 25 — "Synthetic Data Generated by CLAIM: From Healthy to Diseased" — 3D and 2D views</p>
+        <p class="fig-desc">The 3D mesh and 2D short-axis slice grid showing controllable and diverse scar patterns generated from the same healthy input, with different locations, sizes, and transmuralities across outputs.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d2">From a single healthy heart input, CLAIM generates multiple synthetic outputs with completely distinct scar patterns. Location, size, and transmurality all vary across the 17 AHA segments, covering morphologies that the real training set never contained.</p>
+
+    <!-- Figures 2 + 3 side by side -->
+    <div class="qual-pair rev d3">
+      <div>
+        <div class="fig-slot" data-img="images/claim_scar_comparison.png" data-alt="Real scars vs DiffMask vs SMILE comparison">
+          <div class="fig-inner">
+            <span class="fig-file">images/claim_scar_comparison.png</span>
+            <p class="fig-src">Export from Slide 52 — Synthetic Scar Generation — 3-row comparison</p>
+            <p class="fig-desc">Real Scars / DiffMask / SMILE Ours — three-row comparison grid.</p>
+          </div>
+        </div>
+        <p class="fig-cap">Without anatomical conditioning, DiffMask produces scars in implausible locations. SMILE-generated scars match real pathology morphology.</p>
+      </div>
+      <div>
+        <div class="fig-slot" data-img="images/claim_lge_generation.png" data-alt="Healthy LGE to scar mask to synthetic pathological LGE">
+          <div class="fig-inner">
+            <span class="fig-file">images/claim_lge_generation.png</span>
+            <p class="fig-src">Export from Slide 53 — Synthetic LGE Generation — healthy to mask to pathological</p>
+            <p class="fig-desc">Real Healthy LGE → Synthetic Scar Mask → Synthetic Pathological LGE.</p>
+          </div>
+        </div>
+        <p class="fig-cap">The diffusion model fills in the scar region while leaving background anatomy completely unchanged. Output: a paired image and mask, ready for training.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §7 RESULTS -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">Quantitative results</p>
+    <h2 class="s-title rev">9.4% better on data the model never saw</h2>
+
+    <div class="result-head rev d1">
+      <div>
+        <div class="result-num">+9.40%</div>
+        <div class="result-unit">Dice improvement on out-of-domain data</div>
+      </div>
+      <p class="result-copy">The headline result is the <strong>out-of-domain gain.</strong> On <span class="hl">80 NHS patient scans</span> from Nottingham (different scanner, different pixel spacing, never seen during training), CLAIM(J) improves Dice from 0.3284 to <span class="hl">0.4224</span>. This is the hardest result to inflate and the most clinically meaningful: a model that actually generalises.</p>
+    </div>
+
+    <div class="fig-slot rev d2" style="max-width:800px;margin:var(--s4) auto" data-img="images/claim_testing.png" data-alt="Testing datasets: EMIDEC intra-domain and Private NHS out-of-domain with 3D visualisations">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_testing.png</span>
+        <p class="fig-src">Export from slides — test dataset table + 3D volume visualisations</p>
+        <p class="fig-desc">Test set summary: EMIDEC (intra-domain, 10 subjects, pixel spacing 1.25×1.25 / 2×2 mm) and Private NHS (out-of-domain, 80 subjects, pixel spacing 0.89×0.89 / 1.7×1.7 mm), with 3D LGE volume and scar renders for each.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d2">The two test sets are visually and physically distinct — different scanners, different resolutions, different scar morphologies. Generalising across this gap is the real challenge.</p>
+
+    <div class="fig-slot rev d3" style="max-width:680px;margin:var(--s4) auto" data-img="images/claim_results_dice.png" data-alt="Dice score comparison bar chart all methods">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_results_dice.png</span>
+        <p class="fig-src">Export from Slide 51 — "Comparing Performance for Scar Segmentation" — final build with all 5 methods</p>
+        <p class="fig-desc">Dice score comparison across all four methods — Baseline, LeFusion+DiffMask, CLAIM+SMILE, and CLAIM(J)+SMILE — on both EMIDEC in-domain and Private NHS out-of-domain test sets.</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap rev d2">
+      <table class="res">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>EMIDEC Dice ↑<span class="th-sub">in-domain, n=10 test cases</span></th>
+            <th>Private NHS Dice ↑<span class="th-sub">out-of-domain, n=80 cases</span></th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Baseline (no synthetic data)</td>
+            <td class="num">0.5889</td>
+            <td class="num">0.3284</td>
+            <td>nnUNet on real data only</td>
+          </tr>
+          <tr>
+            <td>LeFusion + DiffMask</td>
+            <td class="num">0.6091 <span class="delta">(+2.02%)</span></td>
+            <td class="num">0.3964 <span class="delta">(+6.80%)</span></td>
+            <td>ICLR 2025 Spotlight</td>
+          </tr>
+          <tr class="ours">
+            <td>CLAIM + SMILE <strong>(ours)</strong></td>
+            <td class="best">0.6287 <span class="delta">(+3.98%)</span></td>
+            <td class="best">0.4167 <span class="delta">(+8.83%)</span></td>
+            <td>AHA-17 conditioned synthesis</td>
+          </tr>
+          <tr class="ours">
+            <td>CLAIM(J) + SMILE <strong>(ours)</strong></td>
+            <td class="best">0.6353 <span class="delta">(+4.64%)</span></td>
+            <td class="best">0.4224 <span class="delta">(+9.40%)</span></td>
+            <td>With joint training</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note rev d2">Dice ↑ higher is better. % values show absolute Dice improvement over baseline. CLAIM(J) is CLAIM with the joint training paradigm enabled.</p>
+
+    <div class="nhs-box rev d3">
+      <div class="nhs-ico">🏥</div>
+      <div>
+        <span class="nhs-lbl">Real clinical data, NHS validated</span>
+        <p class="nhs-txt">The out-of-domain test set is <strong>80 real LGE-CMR scans from Nottingham University Hospitals NHS Trust</strong>, labelled by cardiologists under formal ethics approval (NotIs CMR resource). This is not a held-out split of a public benchmark. It is a genuinely independent dataset with different scanner vendors and patient populations, making it a rigorous test of real-world clinical generalisability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §8 CLINICAL EVALUATION -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">Clinical evaluation</p>
+    <h2 class="s-title rev">Segment-by-segment: the clinical evaluation</h2>
+    <div class="prose rev d1">
+      <p>Dice score is a standard computer vision metric. Clinicians care about a different question: how accurately is the <span class="hl">volume of scar per heart region</span> being estimated? <strong>Volume Difference (mL) per AHA-17 segment</strong> is a direct measure of clinical utility. Lower is better, and a tighter radar plot means more consistent accuracy across the whole ventricle.</p>
+      <p>CLAIM's radar plot is smaller and more uniform than the baseline's across all levels — basal, middle, apical, and apex. This matters in practice: large per-segment errors in specific coronary territories would make a tool unreliable for exactly the decisions it is meant to support, whether guiding ablation or planning device therapy.</p>
+    </div>
+
+    <div class="fig-slot rev d2" style="max-width:680px;margin:var(--s3) auto" data-img="images/claim_aha_radar.png" data-alt="AHA-17 per-segment volume difference radar charts">
+      <div class="fig-inner">
+        <span class="fig-file">images/claim_aha_radar.png</span>
+        <p class="fig-src">Export from Slide 38 — "Clinical Metric Evaluation with AHA-17 Model" — final build with all rings visible</p>
+        <p class="fig-desc">Two radar charts: Baseline without synthetic data on the left and CLAIM with synthetic data on the right. Volume Difference (mL) across all AHA-17 segments grouped by ring. Lower is better, and a tighter ring means more accurate clinical quantification.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d2">Volume difference (mL) per AHA-17 myocardial segment. CLAIM's radar is tighter and more uniform across basal, middle, apical, and apex regions, indicating consistent scar volume estimation across the entire left ventricle.</p>
+  </div>
+</section>
+
+<!-- §10 CONTRIBUTIONS -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">Key contributions</p>
+    <h2 class="s-title rev">Three things CLAIM adds to the field</h2>
+
+    <div class="contrib-list rev d1">
+      <div class="contrib">
+        <div class="contrib-n"><span class="contrib-ico">🗺️</span>01</div>
+        <div class="contrib-body">
+          <p class="contrib-title">First to embed AHA-17 into a deep learning generative framework for cardiac scar</p>
+          <p class="contrib-desc">SMILE conditions scar mask generation on the clinically adopted <strong>AHA 17-segment model</strong> for LV myocardium, ensuring every synthesised scar is spatially diverse, coronary-territory-constrained, and clinically interpretable. No prior generative model for cardiac pathology has incorporated this clinical standard into the AI training pipeline.</p>
+        </div>
+      </div>
+      <div class="contrib">
+        <div class="contrib-n"><span class="contrib-ico">🔄</span>02</div>
+        <div class="contrib-body">
+          <p class="contrib-title">Joint modelling paradigm for simultaneous synthesis and segmentation improvement</p>
+          <p class="contrib-desc">CLAIM trains a scar segmentation network alongside the diffusion generator in an <strong>alternating feedback loop</strong>. Segmentation feedback improves synthesis quality; synthetic data improves segmentation robustness. The two tasks are mutually reinforcing rather than sequential. <span class="hl">CLAIM(J) + SMILE outperforms CLAIM + SMILE</span> on both evaluation datasets.</p>
+        </div>
+      </div>
+      <div class="contrib">
+        <div class="contrib-n"><span class="contrib-ico">🏥</span>03</div>
+        <div class="contrib-body">
+          <p class="contrib-title">Robustness validated on 80 real NHS patient scans, not just a public benchmark</p>
+          <p class="contrib-desc">The out-of-domain evaluation uses <strong>80 pathological LGE-CMR scans from Nottingham University Hospitals NHS Trust</strong> (different scanner, different pixel spacing, different patient population). CLAIM achieves <span class="hl">+9.40% Dice over the baseline</span> and surpasses the <span class="hl-navy">ICLR 2025 Spotlight</span> comparison LeFusion + DiffMask, showing that anatomical conditioning holds up under real-world distribution shift.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACKNOWLEDGEMENTS -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">Acknowledgements</p>
+    <div class="ack-row rev d1">
+      <div class="ack-logo" title="The Royal Society">
+        <img src="images/logo_royal_society.png" alt="The Royal Society"
+          onerror="this.parentNode.innerHTML='<span class=\'ack-logo-name\'>The Royal Society</span>'"/>
+      </div>
+
+      <div class="ack-divider"></div>
+
+      <div class="ack-logo" title="Nottingham University Hospitals NHS Trust">
+        <img src="images/logo_nhs.png" alt="NHS Nottingham University Hospitals"
+          onerror="this.parentNode.innerHTML='<span class=\'ack-logo-name\'>NHS · Nottingham UH</span>'"/>
+      </div>
+      <div class="ack-logo" title="The University of Nottingham">
+        <img src="images/logo_nottingham.png" alt="The University of Nottingham"
+          onerror="this.parentNode.innerHTML='<span class=\'ack-logo-name\'>University of Nottingham</span>'"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §11 BIBTEX -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">Cite</p>
+    <h2 class="s-title rev">BibTeX</h2>
+    <div class="bibtex rev d1">
+      <button class="bib-copy" id="bibCopy">Copy</button>
+      <pre id="bibText">@inproceedings{ramzan2025claim,
+  title     = {CLAIM: Clinically-Guided LGE Augmentation for Realistic
+               and Diverse Myocardial Scar Synthesis and Segmentation},
+  author    = {Ramzan, Farheen and Kiberu, Yusuf and Jathanna, Nikesh
+               and Jamil-Copley, Shahnaz and Clayton, Richard H. and Chen, Chen},
+  booktitle = {Artificial Intelligence in Healthcare (AIiH 2025)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {16038},
+  pages     = {279--292},
+  year      = {2025},
+  publisher = {Springer, Cham},
+  doi       = {10.1007/978-3-032-00652-3_20},
+  note      = {Best Paper Award}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <a href="../index.html">← farheenramzan.com</a>
+  <p>CLAIM · AIiH 2025 · Best Paper Award · Farheen Ramzan · June 2026</p>
+</footer>
+
+<script>
+// Scroll reveal
+const _io = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }),
+  { threshold: 0.07 }
+);
+document.querySelectorAll('.rev').forEach(el => _io.observe(el));
+
+// BibTeX copy
+document.getElementById('bibCopy').addEventListener('click', function () {
+  navigator.clipboard.writeText(document.getElementById('bibText').innerText)
+    .then(() => {
+      this.textContent = 'Copied!';
+      setTimeout(() => this.textContent = 'Copy', 1600);
+    });
+});
+
+// Group A/B card flip + answer reveal sequence
+(function () {
+  const strip   = document.getElementById('groupStrip');
+  const flipA   = document.getElementById('flipA');
+  const flipB   = document.getElementById('flipB');
+  const reveal  = document.getElementById('hookReveal');
+  if (!strip || !flipA || !flipB || !reveal) return;
+
+  let fired = false;
+  const flipObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting || fired) return;
+      fired = true;
+      flipObs.unobserve(entry.target);
+
+      // Flip Group A after a beat
+      setTimeout(() => flipA.classList.add('flipped'), 350);
+
+      // Flip Group B shortly after
+      setTimeout(() => flipB.classList.add('flipped'), 850);
+
+      // Slide up the answer box after both cards have landed
+      setTimeout(() => reveal.classList.add('revealed'), 2400);
+    });
+  }, { threshold: 0.45 });
+
+  flipObs.observe(strip);
+})();
+
+// Smart image loader:
+// Each .fig-slot with data-img tries to load that image.
+// If it loads successfully, the placeholder is replaced with the actual image.
+// If it fails (file not placed yet), the placeholder stays visible.
+document.querySelectorAll('.fig-slot[data-img]').forEach(slot => {
+  const src = slot.dataset.img;
+  const alt = slot.dataset.alt || '';
+  const probe = new Image();
+  probe.onload = () => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = alt;
+    img.style.cssText = 'width:100%;display:block';
+    const savedMaxWidth = slot.style.maxWidth;
+    const savedMargin   = slot.style.margin || 'var(--s3) 0';
+    const inDark = slot.closest('.hook, .section.ink');
+    if (inDark) {
+      // Keep a dark-tinted frame so white-bg images don't clash
+      slot.style.cssText = `background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:12px;margin:${savedMargin}`;
+    } else {
+      slot.style.cssText = `border:1px solid var(--line);background:var(--white);margin:${savedMargin}`;
+    }
+    if (savedMaxWidth) slot.style.maxWidth = savedMaxWidth;
+    slot.innerHTML = '';
+    slot.appendChild(img);
+  };
+  // onerror: do nothing, placeholder stays visible
+  probe.src = src;
+});
+</script>
+</body>
+</html>

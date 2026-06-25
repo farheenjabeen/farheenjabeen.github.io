@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Seeing Beyond the Image: ECG and Anatomical Knowledge-Guided Myocardial Scar Segmentation. Oral, IEEE ISBI 2026. Farheen Ramzan et al."/>
+<meta property="og:title" content="Seeing Beyond the Image · Farheen Ramzan"/>
+<meta property="og:type" content="article"/>
+<title>Seeing Beyond the Image · Farheen Ramzan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=Lora:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:54px}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+:root{
+  --ink:#0D0D0D;--body:#363636;--muted:#6B6B6B;--faint:#ABABAB;
+  --white:#FFFFFF;--off:#F6F4F0;--warm:#FAF8F4;--line:#E6E4DE;--line2:#CCC9C0;
+  --accent:#A06810;--accent-s:#FBF6EC;--accent-b:rgba(160,104,16,0.15);
+  --navy:#1D2E4F;--navy-s:#ECF0F8;--navy-b:rgba(29,46,79,0.12);
+  --green:#185C35;--green-s:#EAF5EE;--green-b:rgba(24,92,53,0.12);
+  --f-xs:0.6875rem;--f-sm:0.8125rem;--f-md:0.9375rem;--f-lg:1.0625rem;
+  --f-2xl:1.875rem;--f-3xl:2.75rem;
+  --sans:'Plus Jakarta Sans',system-ui,sans-serif;
+  --serif:'Lora',Georgia,serif;--mono:'JetBrains Mono',monospace;
+  --max:940px;--gutter:clamp(1.25rem,4vw,2.75rem);
+  --s1:.5rem;--s2:1rem;--s3:1.5rem;--s4:2rem;--s5:3rem;--s6:4.5rem;
+}
+body{font-family:var(--sans);font-size:var(--f-md);line-height:1.7;color:var(--body);background:var(--white);overflow-x:hidden}
+
+.rev{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.rev.in{opacity:1;transform:none}
+.rev.d1{transition-delay:.09s}.rev.d2{transition-delay:.18s}.rev.d3{transition-delay:.28s}.rev.d4{transition-delay:.4s}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;height:54px;display:flex;align-items:center;
+  padding:0 var(--gutter);background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);gap:var(--s2)}
+.nav-back{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:6px;transition:color .15s}
+.nav-back:hover{color:var(--ink)}
+.nav-name{font-size:var(--f-sm);font-weight:700;color:var(--ink);margin-left:auto}
+
+/* HERO */
+.hero{max-width:calc(var(--max) + var(--gutter)*2);margin:0 auto;padding:var(--s6) var(--gutter) var(--s5)}
+.hero-inner{display:grid;grid-template-columns:1fr auto;gap:var(--s5);align-items:start}
+.hero-eyebrow{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--s2)}
+.hero-title{font-family:var(--serif);font-style:italic;font-size:clamp(2.2rem,6vw,3.8rem);font-weight:400;color:var(--ink);letter-spacing:-.02em;line-height:1.1;margin-bottom:var(--s2)}
+.hero-full{font-family:var(--sans);font-size:clamp(.9rem,1.8vw,1.05rem);color:var(--muted);line-height:1.55;max-width:580px;margin-bottom:var(--s3)}
+.hero-authors{font-size:var(--f-sm);color:var(--body);line-height:2;margin-bottom:var(--s2)}
+.hero-authors .me{color:var(--accent);font-weight:700}
+.hero-authors sup{font-size:.65em;color:var(--accent);vertical-align:super}
+.hero-affil{font-family:var(--mono);font-size:var(--f-xs);color:var(--muted);letter-spacing:.02em;margin-bottom:var(--s3);line-height:1.9}
+.hero-affil sup{color:var(--accent);font-size:.7em;vertical-align:super;font-weight:600;margin-right:1px}
+.hero-venue{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.06em;text-transform:uppercase;background:var(--navy-s);color:var(--navy);
+  border:1px solid var(--navy-b);padding:7px 14px;margin-bottom:var(--s3)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.05em;text-transform:uppercase;padding:11px 20px;border:1px solid;transition:all .15s;font-weight:500}
+.btn-solid{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.btn-solid:hover{background:#2a2a2a}
+.btn-ghost{background:var(--white);color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--off)}
+.btn-dim{background:var(--white);color:var(--faint);border-color:var(--line);cursor:default}
+
+/* Oral badge */
+.oral-badge{background:var(--navy);padding:var(--s3) var(--s3) var(--s4);min-width:180px;
+  position:relative;overflow:hidden;flex-shrink:0}
+.oral-badge::before{content:'';position:absolute;top:-16px;right:-16px;width:64px;height:64px;
+  background:rgba(255,255,255,0.08);border-radius:50%}
+.oral-ico{font-size:1.8rem;display:block;margin-bottom:10px}
+.oral-tag{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);display:block;margin-bottom:5px}
+.oral-title{font-size:var(--f-sm);font-weight:700;color:var(--white);line-height:1.4;margin-bottom:5px}
+.oral-sub{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.04em;display:block}
+
+/* TL;DR */
+.tldr{background:var(--navy);padding:var(--s3) var(--gutter)}
+.tldr-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:var(--s3);align-items:center}
+.tldr-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);white-space:nowrap}
+.tldr-txt{font-family:var(--serif);font-style:italic;font-size:var(--f-lg);color:rgba(255,255,255,.9);line-height:1.55}
+.tldr-txt strong{font-family:var(--sans);font-style:normal;font-weight:700;color:var(--accent)}
+
+/* HERO IMAGE BANNER */
+.hero-img{background:var(--ink);padding:var(--s4) var(--gutter);text-align:center}
+.hero-img img{display:block;max-width:520px;width:100%;margin:0 auto}
+.hero-img-cap{background:var(--ink);padding:var(--s2) var(--gutter) var(--s3);
+  text-align:center;font-family:var(--mono);font-size:var(--f-xs);
+  color:rgba(255,255,255,.3);letter-spacing:.04em;line-height:1.7}
+.hero-img-cap .hi{color:var(--accent)}
+
+/* SECTIONS */
+.section{border-top:1px solid var(--line);padding:var(--s6) var(--gutter)}
+.section.off{background:var(--off)}
+.section.ink{background:var(--ink);border-color:transparent}
+.inner{max-width:var(--max);margin:0 auto}
+.s-eye{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--s2)}
+.ink .s-eye{color:var(--accent)}
+.s-title{font-size:var(--f-2xl);font-weight:800;color:var(--ink);letter-spacing:-.025em;line-height:1.1;margin-bottom:var(--s4)}
+.ink .s-title{color:var(--white)}
+.prose{font-size:var(--f-md);color:var(--body);line-height:1.85}
+.prose p+p{margin-top:var(--s3)}
+.prose strong{color:var(--ink);font-weight:600}
+.ink .prose{color:rgba(255,255,255,.8)}
+.ink .prose strong{color:var(--white)}
+
+/* FIGURE SLOTS */
+.fig-slot{border:1.5px dashed var(--line2);background:var(--off);overflow:hidden;margin:var(--s3) 0}
+.ink .fig-slot{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)}
+.fig-inner{padding:var(--s5) var(--s3);text-align:center}
+.fig-file{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.08em;text-transform:uppercase;
+  background:var(--ink);color:var(--accent);padding:4px 10px;display:inline-block;margin-bottom:var(--s2)}
+.ink .fig-file{background:rgba(255,255,255,.1)}
+.fig-src{font-family:var(--mono);font-size:var(--f-xs);color:var(--faint);letter-spacing:.03em;margin-bottom:10px}
+.ink .fig-src{color:rgba(255,255,255,.25)}
+.fig-desc{font-size:var(--f-sm);color:var(--muted);line-height:1.6;max-width:480px;margin:0 auto}
+.ink .fig-desc{color:rgba(255,255,255,.4)}
+.fig-cap{font-family:var(--serif);font-style:italic;font-size:var(--f-sm);color:var(--muted);
+  line-height:1.65;text-align:center;padding:0 var(--s3);margin-top:12px}
+.ink .fig-cap{color:rgba(255,255,255,.4)}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:var(--s4)}
+.stat-card{background:var(--white);padding:var(--s3);transition:background .15s}
+.stat-card:hover{background:var(--warm)}
+.stat-ico{font-size:1.4rem;margin-bottom:var(--s1)}
+.stat-val{font-size:var(--f-3xl);font-weight:800;color:var(--ink);letter-spacing:-.04em;line-height:1;margin-bottom:5px}
+.stat-val sub{font-size:var(--f-md);font-weight:500;color:var(--muted);vertical-align:middle;letter-spacing:0}
+.stat-tag{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.stat-note{font-size:var(--f-xs);color:var(--muted);line-height:1.55}
+
+/* PUNCHLINE */
+.punchline{background:var(--accent);padding:var(--s4) var(--gutter)}
+.punchline-inner{max-width:var(--max);margin:0 auto;text-align:center}
+.punchline p{font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.15rem,3vw,1.65rem);color:var(--white);line-height:1.55}
+.punchline em{font-style:normal;font-weight:700;text-decoration:underline;
+  text-decoration-color:rgba(255,255,255,.4);text-underline-offset:4px}
+
+/* ECG-AHA TABLE */
+.ecg-tbl-wrap{border:1px solid var(--line);overflow:hidden;margin-top:var(--s4)}
+table.ecg{border-collapse:collapse;width:100%;font-size:var(--f-sm)}
+table.ecg th{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.06em;text-transform:uppercase;
+  background:var(--ink);color:rgba(255,255,255,.6);padding:10px 16px;text-align:left;font-weight:500;border-right:1px solid rgba(255,255,255,.08)}
+table.ecg th:last-child{border-right:none}
+table.ecg td{padding:12px 16px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:middle}
+table.ecg td:last-child{border-right:none}
+table.ecg tbody tr:last-child td{border-bottom:none}
+table.ecg .lead{font-family:var(--mono);font-weight:600;color:var(--accent);font-size:var(--f-sm)}
+table.ecg .wall{font-weight:600;color:var(--navy)}
+table.ecg .segs{font-family:var(--mono);color:var(--muted);font-size:var(--f-xs)}
+
+/* TWO-COLUMN COMPARISON */
+.tc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:var(--s4)}
+.tc-col{padding:var(--s4)}
+.tc-col.bad{background:rgba(139,26,26,.03)}
+.tc-col.good{background:rgba(24,92,53,.03)}
+.tc-head{display:flex;align-items:center;gap:10px;margin-bottom:var(--s3);padding-bottom:var(--s3);border-bottom:1px solid var(--line)}
+.tc-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.tc-col.bad .tc-lbl{color:var(--red,#8B1A1A)}
+.tc-col.good .tc-lbl{color:var(--green)}
+.tc-list{display:flex;flex-direction:column;gap:14px}
+.tc-item{display:flex;align-items:flex-start;gap:10px;font-size:var(--f-sm);line-height:1.6}
+.tc-dot{flex-shrink:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.tc-col.bad .tc-dot{background:rgba(139,26,26,.08);color:#8B1A1A}
+.tc-col.good .tc-dot{background:var(--green-b);color:var(--green)}
+
+/* TAFF STEPS */
+.taff-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--line);
+  border:1px solid var(--line);margin-top:var(--s4)}
+.taff-step{background:var(--white);padding:var(--s3);position:relative}
+.taff-step:nth-child(1){border-top:3px solid var(--navy)}
+.taff-step:nth-child(2){border-top:3px solid var(--accent)}
+.taff-step:nth-child(3){border-top:3px solid var(--accent)}
+.taff-step:nth-child(4){border-top:3px solid var(--navy)}
+.taff-step:not(:last-child)::after{content:'→';position:absolute;right:-11px;top:48%;
+  transform:translateY(-50%);color:var(--accent);font-size:.95rem;z-index:2;font-weight:700}
+.step-n{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block}
+.step-name{font-size:var(--f-sm);font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:6px}
+.step-desc{font-size:var(--f-xs);color:var(--muted);line-height:1.65}
+
+/* RESULTS */
+.result-head{display:flex;align-items:flex-start;gap:var(--s4);margin-bottom:var(--s4);flex-wrap:wrap}
+.result-num{font-family:var(--mono);font-size:clamp(3.5rem,9vw,6rem);font-weight:800;
+  color:var(--accent);letter-spacing:-.05em;line-height:.88}
+.result-unit{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-top:8px}
+.result-copy{font-size:var(--f-lg);color:var(--ink);line-height:1.7;max-width:480px;padding-top:8px}
+.result-copy strong{color:var(--accent);font-weight:700}
+
+/* RESULTS TABLE */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line)}
+table.res{border-collapse:collapse;width:100%;font-size:var(--f-sm);min-width:520px}
+table.res th{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);background:var(--off);padding:10px 14px;border-bottom:1px solid var(--line);font-weight:500;text-align:left}
+table.res .th-sub{font-size:9px;letter-spacing:.02em;text-transform:none;font-weight:400;color:var(--faint);display:block;margin-top:2px}
+table.res td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--body)}
+table.res tbody tr:last-child td{border-bottom:none}
+table.res td:first-child{color:var(--ink)}
+table.res .best{color:var(--accent);font-weight:700;font-family:var(--mono)}
+table.res .num{font-family:var(--mono)}
+table.res .ours td{background:rgba(160,104,16,.04)}
+table.res .ours td:first-child{font-weight:700}
+.tbl-note{font-family:var(--mono);font-size:var(--f-xs);color:var(--faint);margin-top:10px;letter-spacing:.02em}
+
+/* ABLATION TABLE */
+.ap-yes{color:var(--green);font-weight:700;text-align:center}
+.ap-no{color:#8B1A1A;font-weight:700;text-align:center}
+.abl-divider td{background:var(--off);font-family:var(--mono);font-size:var(--f-xs);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  padding:8px 14px;border-top:2px solid var(--line2)}
+
+/* PAIR GRID */
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);margin-top:var(--s4);align-items:start}
+
+/* CONTRIBUTIONS */
+.contrib-list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:var(--s4)}
+.contrib{background:var(--white);display:grid;grid-template-columns:72px 1fr;transition:background .15s}
+.contrib:hover{background:var(--warm)}
+.contrib-n{font-family:var(--mono);font-size:3rem;font-weight:700;color:var(--accent);
+  line-height:1;padding:var(--s3);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;letter-spacing:-.04em}
+.contrib-ico{font-size:1.4rem;line-height:1}
+.contrib-body{padding:var(--s3)}
+.contrib-title{font-size:var(--f-md);font-weight:700;color:var(--ink);margin-bottom:6px}
+.contrib-desc{font-size:var(--f-sm);color:var(--body);line-height:1.7}
+
+/* HIGHLIGHT CHIPS */
+.hl{background:var(--accent-s);color:var(--accent);padding:1px 5px;font-weight:600;border-radius:2px;white-space:nowrap}
+.hl-navy{background:var(--navy-s);color:var(--navy);padding:1px 5px;font-weight:600;border-radius:2px;white-space:nowrap}
+
+/* QUALITATIVE CAROUSEL */
+.carousel{position:relative;margin-top:var(--s4)}
+.carousel-cat{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.1em;text-transform:uppercase;
+  font-weight:700;padding:8px 14px;display:inline-block;margin-bottom:var(--s2);border-radius:2px}
+.cat-good{background:var(--green-s);color:var(--green)}
+.cat-mod{background:var(--accent-s);color:var(--accent)}
+.cat-fail{background:rgba(139,26,26,.1);color:#8B1A1A}
+.carousel-viewport{overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.carousel-track{display:flex;transition:transform .45s cubic-bezier(0.4,0,0.2,1)}
+.carousel-slide{min-width:100%;position:relative;background:#fff}
+.carousel-slide img{width:100%;display:block}
+.slide-ph{padding:var(--s5) var(--s3);text-align:center;background:rgba(255,255,255,.04)}
+.slide-ph-file{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.08em;text-transform:uppercase;
+  background:var(--ink);color:var(--accent);padding:4px 10px;display:inline-block;margin-bottom:var(--s2)}
+.slide-ph-note{font-size:var(--f-xs);color:rgba(255,255,255,.3);margin-top:8px}
+.carousel-foot{display:flex;align-items:center;justify-content:center;gap:var(--s3);margin-top:var(--s3)}
+.carousel-caption{font-family:var(--serif);font-style:italic;font-size:var(--f-sm);
+  color:rgba(255,255,255,.5);line-height:1.7;text-align:center;
+  padding:var(--s2) var(--s3) 0;min-height:3.5em}
+.carousel-btn{width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--white);
+  border:none;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .15s;font-family:var(--sans)}
+.carousel-btn:hover{background:#c07d10}
+.carousel-btn:disabled{background:rgba(255,255,255,.1);color:rgba(255,255,255,.25);cursor:default}
+.carousel-counter{font-family:var(--mono);font-size:var(--f-sm);color:rgba(255,255,255,.6);
+  letter-spacing:.06em;min-width:50px;text-align:center}
+
+/* ACKNOWLEDGEMENTS */
+.ack-row{display:flex;align-items:center;gap:var(--s3);flex-wrap:nowrap;margin-top:var(--s3);overflow-x:auto}
+.ack-group-inline{display:flex;align-items:center;gap:var(--s2);flex-shrink:0}
+.ack-lbl{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.ack-logos{display:flex;align-items:center;gap:var(--s2);flex-shrink:0}
+.ack-logo{height:100px;display:flex;align-items:center;justify-content:center;
+  background:var(--white);border:1px solid var(--line);padding:14px 22px;flex-shrink:0}
+.ack-logo img{height:100%;width:auto;display:block;object-fit:contain;max-width:180px}
+.ack-logo-name{font-family:var(--mono);font-size:var(--f-xs);color:var(--muted);white-space:nowrap}
+.ack-divider{width:1px;height:80px;background:var(--line);flex-shrink:0}
+
+/* BIBTEX */
+.bibtex{background:var(--ink);padding:var(--s3);position:relative;overflow-x:auto;margin-top:var(--s3)}
+.bibtex pre{font-family:var(--mono);font-size:var(--f-xs);color:rgba(255,255,255,.82);line-height:1.75;white-space:pre}
+.bib-copy{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);
+  padding:6px 11px;cursor:pointer;transition:all .15s}
+.bib-copy:hover{background:rgba(160,104,16,.25);color:var(--accent)}
+
+/* FOOTER */
+.footer{background:var(--ink);padding:var(--s4) var(--gutter);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s2)}
+.footer a{font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.05em;text-transform:uppercase;color:var(--accent)}
+.footer p{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:rgba(255,255,255,.22)}
+
+/* RESPONSIVE */
+@media(max-width:820px){
+  .hero-inner{grid-template-columns:1fr}
+  .oral-badge{display:none}
+  .tldr-inner{grid-template-columns:1fr}
+  .tldr-lbl{display:none}
+  .tc-grid{grid-template-columns:1fr}
+  .taff-steps{grid-template-columns:1fr 1fr}
+  .taff-step:not(:last-child)::after{display:none}
+  .stat-row{grid-template-columns:1fr}
+  .pair-grid{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .taff-steps{grid-template-columns:1fr}
+  .contrib{grid-template-columns:1fr}
+  .contrib-n{border-right:none;border-bottom:1px solid var(--line);justify-content:flex-start;font-size:1.5rem;padding:var(--s2) var(--s3)}
+  .btns{flex-direction:column;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){.rev{opacity:1;transform:none;transition:none}}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-back" href="../index.html#publications">← All work</a>
+  <span class="nav-name">Farheen Ramzan</span>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner rev">
+    <div>
+      <p class="hero-eyebrow">Project · Multimodal AI · Cardiac Imaging</p>
+      <h1 class="hero-title">Seeing Beyond the Image</h1>
+      <p class="hero-full">ECG and Anatomical Knowledge-Guided Myocardial Scar Segmentation from Late Gadolinium-Enhanced Images</p>
+      <p class="hero-authors">
+        <span class="me">Farheen Ramzan</span><sup>1</sup>,
+        Yusuf Kiberu<sup>2</sup>,
+        Nikesh Jathanna<sup>2</sup>,
+        Meryem Jabrane<sup>1</sup>,
+        Vicente Grau<sup>4</sup>,
+        Shahnaz Jamil-Copley<sup>2,3</sup>,
+        Richard H. Clayton<sup>1</sup>,
+        Chen (Cherise) Chen<sup>1</sup>
+      </p>
+      <p class="hero-affil">
+        <sup>1</sup> School of Computer Science, University of Sheffield &nbsp;&nbsp;
+        <sup>2</sup> Department of Cardiology, Nottingham University Hospitals NHS Trust<br>
+        <sup>3</sup> School of Medicine, University of Nottingham &nbsp;&nbsp;
+        <sup>4</sup> Department of Engineering Science, University of Oxford
+      </p>
+      <div class="hero-venue">🎤 Oral · IEEE ISBI 2026 · London, UK</div>
+      <div class="btns">
+        <a class="btn btn-solid" href="https://ieeexplore.ieee.org/abstract/document/11515710" target="_blank" rel="noopener">📄 Paper</a>
+        <a class="btn btn-ghost" href="https://arxiv.org/abs/2511.14702" target="_blank" rel="noopener">arXiv</a>
+        <a class="btn btn-ghost" href="https://github.com/farheenjabeen/multimodal_ECG_LGE" target="_blank" rel="noopener">💻 Code</a>
+      </div>
+    </div>
+    <div class="oral-badge">
+      <span class="oral-ico">🎤</span>
+      <span class="oral-tag">Oral Presentation</span>
+      <span class="oral-title">IEEE ISBI 2026<br>London, UK</span>
+      <span class="oral-sub">International Symposium on Biomedical Imaging</span>
+    </div>
+  </div>
+</header>
+
+<!-- TL;DR -->
+<div class="tldr rev">
+  <div class="tldr-inner">
+    <span class="tldr-lbl">TL;DR</span>
+    <p class="tldr-txt">The ECG tells the model <strong>where scar should be.</strong> The image shows it what scar looks like. Together they achieve what neither can alone, delivering a <strong>37% improvement</strong> over the image-only state of the art.</p>
+  </div>
+</div>
+
+<!-- HERO IMAGE BANNER -->
+<div class="hero-img rev">
+  <img src="images/claim_lge_mri.png" alt="Late Gadolinium Enhancement cardiac MRI short-axis slice annotated with Left Ventricle, Right Ventricle and Myocardium"/>
+  <p class="hero-img-cap">The task: detect and segment <span class="hi">myocardial scar</span> from <span class="hi">LGE-CMR</span>, guided not just by what the image shows but by what the <span class="hi">ECG</span> already knows about where scar can be.</p>
+</div>
+
+<!-- §1 THE IMAGE ALONE DOESN'T ALWAYS SETTLE IT -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">The clinical problem</p>
+    <h2 class="s-title rev">The image alone doesn't always settle it</h2>
+    <div class="prose rev d1">
+      <p>Late Gadolinium Enhancement MRI is the standard for visualising myocardial scar, but the boundary between scarred and healthy tissue is not always sharp. Image contrast varies between scanners and patients, small or diffuse scars are easy to miss, and a model trained only on images inherits all of that ambiguity.</p>
+      <p>Clinicians don't work from the image in isolation. The <span class="hl">12-lead ECG</span> carries complementary physiological evidence about where electrical conduction has been disrupted. That evidence often points to scar the image renders ambiguously. The question this work asks is simple: if a cardiologist uses both, <strong>can a segmentation model learn to do the same?</strong></p>
+    </div>
+
+    <div class="stat-row rev d2">
+      <div class="stat-card">
+        <div class="stat-ico">📉</div>
+        <div class="stat-val">0.61<sub> Dice</sub></div>
+        <div class="stat-tag">Image-only baseline</div>
+        <div class="stat-note">State-of-the-art nnU-Net trained on LGE images alone achieves a Dice of 0.6149 on scar segmentation. Good, but still far from what clinical deployment requires.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico">📏</div>
+        <div class="stat-val">4.43<sub> ml</sub></div>
+        <div class="stat-tag">Scar volume error (baseline)</div>
+        <div class="stat-note">The image-only model mis-estimates scar volume by 4.43 ml on average. For clinical decisions like ICD implantation and ablation planning, that error is clinically significant.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico">🏥</div>
+        <div class="stat-val">103<sub> subjects</sub></div>
+        <div class="stat-tag">Nottingham Multimodal Dataset</div>
+        <div class="stat-note">Paired LGE-MRI and 12-lead ECG from real patients at Nottingham University Hospitals NHS Trust, with expert scar annotations (Jathanna et al., JCMR 2023).</div>
+      </div>
+    </div>
+
+    <div class="fig-slot rev d3" style="max-width:660px;margin:var(--s4) auto" data-img="images/sb_challenge.png" data-alt="LGE scar detection challenge">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_challenge.png</span>
+        <p class="fig-src">Export from Slide 5 — "Can you spot the scar?" — scar detection challenge</p>
+        <p class="fig-desc">A real LGE cardiac MRI short-axis slice showing the challenge: boundaries are unclear, appearance varies across patients, motion artifacts, and low contrast with healthy tissue.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d3">Even for experienced cardiologists, identifying precise scar boundaries from LGE images alone is not straightforward. A model limited to the image inherits every one of these challenges.</p>
+  </div>
+</section>
+
+<!-- PUNCHLINE -->
+<div class="punchline rev">
+  <div class="punchline-inner">
+    <p>A cardiologist never looks at the image alone. <em>Neither should the model.</em></p>
+  </div>
+</div>
+
+<!-- §2 WHAT THE ECG KNOWS THAT THE IMAGE CAN'T SEE -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">The clinical insight</p>
+    <h2 class="s-title rev">What the ECG knows that the image can't see</h2>
+    <div class="prose rev d1">
+      <p>The ECG is not just a monitoring output. Each lead has a well-established correspondence to a specific cardiac wall, which maps directly to specific AHA-17 myocardial segments. Abnormalities in lead <span class="hl-navy">II, III, aVF</span> implicate the inferior wall. Abnormalities in <span class="hl-navy">V5, V6, I, aVL</span> implicate the lateral wall. The ECG is, in effect, a physiological index of where scar is likely to be. No purely image-based model has ever used it.</p>
+      <p>This is the core motivation of the paper. The ECG provides a spatial prior that pre-locates scar at the level of cardiac territories, before the image features even enter the picture. TAFF is built to exploit exactly that prior.</p>
+    </div>
+
+    <div class="fig-slot rev d2" data-img="images/sb_ecg_leads_mapping.png" data-alt="12-lead ECG placement and cardiac territory colour-coding: Septal blue, Anterior red, Lateral green, Inferior yellow">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_ecg_leads_mapping.png</span>
+        <p class="fig-src">Export from slides — ECG lead placement diagram + colour-coded territory traces</p>
+        <p class="fig-desc">Lead electrode positions on the body (left) and their corresponding ECG traces colour-coded by cardiac territory: Septal (blue), Anterior (red), Lateral (green), Inferior (yellow).</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d2">Each of the 12 ECG leads is physically connected to a specific region of the heart. Abnormalities in a lead's trace point directly to the cardiac territory it monitors. TAFF uses this mapping as a conditioning prior.</p>
+
+    <div class="fig-slot rev d3" style="max-width:720px;margin:var(--s4) auto" data-img="images/sb_ecg_mapping.png" data-alt="ECG-AHA-17 lead mapping with atlas">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_ecg_mapping.png</span>
+        <p class="fig-src">Export from Slide 17 — ECG-AHA mapping with full lead table + AHA-17 atlas</p>
+        <p class="fig-desc">The complete ECG lead-to-wall-to-segment mapping with the AHA-17 bull's-eye atlas and the standardisation diagram.</p>
+      </div>
+    </div>
+
+    <div class="fig-slot rev d3" style="max-width:680px;margin:var(--s3) auto" data-img="images/sb_ecg_example.png" data-alt="ECG indicating lateral wall scar example">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_ecg_example.png</span>
+        <p class="fig-src">Export from Slide 21 — "ECG indicates scar in lateral wall" — Normal vs Scar ECG example</p>
+        <p class="fig-desc">A concrete example: ECG abnormality in lateral leads localises to segments 5, 6, 11, 12, 16. The AHA-17 map translates the electrical signal into a spatial prediction.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d3">A concrete example of the ECG-to-anatomy mapping in practice. Abnormalities in lateral leads directly implicate specific AHA-17 segments, giving the model a spatial head start before looking at the image.</p>
+  </div>
+</section>
+
+<!-- §3 THE TEMPORAL PROBLEM NOBODY MENTIONS -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">The engineering challenge</p>
+    <h2 class="s-title rev">The temporal problem nobody mentions</h2>
+    <div class="prose rev d1">
+      <p>ECGs and LGE-MRI scans are not acquired simultaneously. The gap between acquisitions varies per patient and per session. Cardiac physiology, rhythm, and fluid status can all shift in that window. Naively fusing features from asynchronous modalities treats them as if they were captured at the same instant, and that assumption degrades the fusion signal, particularly in patients where the gap is large.</p>
+      <p>Most multimodal methods pretend this problem doesn't exist. <strong>TAFF was built specifically to solve it</strong> by dynamically weighting the ECG contribution based on the measured time difference between acquisitions.</p>
+    </div>
+
+    <div class="tc-grid rev d2">
+      <div class="tc-col bad">
+        <div class="tc-head">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#8B1A1A" stroke-width="1.5"/><path d="M5.5 5.5l7 7M12.5 5.5l-7 7" stroke="#8B1A1A" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="tc-lbl">Standard multimodal fusion</span>
+        </div>
+        <div class="tc-list">
+          <div class="tc-item"><span class="tc-dot">⏰</span><span><strong>Assumes simultaneity.</strong> ECG and MRI features are fused as if acquired at the same time, regardless of the actual gap between sessions.</span></div>
+          <div class="tc-item"><span class="tc-dot">📉</span><span><strong>Degrades with gap size.</strong> Performance drops when ECG and MRI are acquired days or weeks apart, because physiology has shifted.</span></div>
+          <div class="tc-item"><span class="tc-dot">🔇</span><span><strong>Silent failure.</strong> There is no mechanism to reduce ECG influence when the temporal gap makes it less reliable.</span></div>
+        </div>
+      </div>
+      <div class="tc-col good">
+        <div class="tc-head">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#185C35" stroke-width="1.5"/><path d="M5 9l3 3 5-5" stroke="#185C35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="tc-lbl">TAFF (this work)</span>
+        </div>
+        <div class="tc-list">
+          <div class="tc-item"><span class="tc-dot">🕐</span><span><strong>Time-gap aware.</strong> The acquisition time difference is measured and fed into the model as an explicit conditioning signal at every fusion step.</span></div>
+          <div class="tc-item"><span class="tc-dot">⚖️</span><span><strong>Dynamic weighting.</strong> A Gating MLP modulates ECG feature importance based on the time gap, reducing ECG influence when the gap is large and increasing it when the gap is small.</span></div>
+          <div class="tc-item"><span class="tc-dot">📈</span><span><strong>Robust across gaps.</strong> Performance is maintained regardless of acquisition gap size, as confirmed by the time-conditioning ablation.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fig-slot rev d3" style="margin-top:var(--s4)" data-img="images/sb_challenges.png" data-alt="Temporal misalignment and spatial correspondence challenges">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_challenges.png</span>
+        <p class="fig-src">Export from Slide 22 — "Key Challenges for Integrating ECG" — temporal misalignment + spatial correspondence</p>
+        <p class="fig-desc">The two core challenges: ECG and MRI are acquired at different times (temporal misalignment) and ECG leads capture cardiac regions, not pixel-level anatomy (spatial correspondence).</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d3">The two challenges that make ECG-MRI fusion genuinely hard, and that prior multimodal methods consistently fail to address.</p>
+  </div>
+</section>
+
+<!-- §4 TAFF: TEMPORAL AWARE FEATURE FUSION -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">The core module</p>
+    <h2 class="s-title rev">TAFF: Temporal Aware Feature Fusion</h2>
+    <div class="prose rev d1">
+      <p>TAFF is the module that makes ECG-MRI fusion clinically reliable. It operates in three stages: first learning how much to trust the ECG given the time gap, then using that trust signal to modulate how image features are shifted and scaled, and finally letting ECG temporal features and image spatial features attend to each other through cross-attention.</p>
+      <p>The result is a fusion that is not just spatially aligned. It is <strong>temporally honest</strong>. When the ECG was recorded recently, it carries full weight. When it was recorded long ago, the model learns to rely more on what the image itself says.</p>
+    </div>
+
+    <div class="taff-steps rev d2">
+      <div class="taff-step">
+        <span class="step-n">Component 01</span>
+        <p class="step-name">ECG Encoder</p>
+        <p class="step-desc">The 12-lead ECG median waveform is encoded into a sequence of temporal feature vectors, each representing a time step in the cardiac cycle across all leads simultaneously.</p>
+      </div>
+      <div class="taff-step">
+        <span class="step-n">Component 02</span>
+        <p class="step-name">Gating MLP</p>
+        <p class="step-desc">A lightweight MLP takes the ECG-MRI acquisition time difference as input and outputs a gate scalar that controls how strongly the ECG features are allowed to influence the image features.</p>
+      </div>
+      <div class="taff-step">
+        <span class="step-n">Component 03</span>
+        <p class="step-name">Temporal FiLM</p>
+        <p class="step-desc">Feature-wise Linear Modulation applies the gated ECG context to shift and scale image encoder features, conditioning the image representation on the physiological signal without any hard concatenation.</p>
+      </div>
+      <div class="taff-step">
+        <span class="step-n">Component 04</span>
+        <p class="step-name">Cross-Attention</p>
+        <p class="step-desc">ECG temporal features and spatial image features attend to each other bidirectionally. The ECG attends to relevant spatial regions; the image attends to relevant cardiac cycle phases.</p>
+      </div>
+    </div>
+
+    <div class="pair-grid rev d2" style="margin-top:var(--s4)">
+      <div>
+        <div class="fig-slot" data-img="images/sb_taff.png" data-alt="TAFF architecture detail" data-fixedheight="400">
+          <div class="fig-inner">
+            <span class="fig-file">images/sb_taff.png</span>
+            <p class="fig-src">Export from Slide 27 — TAFF: Gating MLP, Temporal FiLM, cross-attention</p>
+            <p class="fig-desc">The internal TAFF architecture: MRI features and ECG features enter, the Gating MLP weights by time gap, Temporal FiLM modulates image features, and cross-attention aligns the two modalities.</p>
+          </div>
+        </div>
+        <p class="fig-cap">Inside TAFF. The Gating MLP controls ECG influence. Temporal FiLM applies it. Cross-attention aligns the two modalities spatially and temporally.</p>
+      </div>
+      <div>
+        <div class="fig-slot" data-img="images/sb_pipeline.png" data-alt="Full multimodal pipeline with TAFF" data-fixedheight="400">
+          <div class="fig-inner">
+            <span class="fig-file">images/sb_pipeline.png</span>
+            <p class="fig-src">Export from Slide 26 — "Our Multimodal Pipeline" — complete pipeline with TAFF + AHA-17</p>
+            <p class="fig-desc">The full pipeline: LGE-MRI encoder + 12-lead ECG encoder + AHA-17 anatomical prior fused through TAFF to produce the scar segmentation prediction.</p>
+          </div>
+        </div>
+        <p class="fig-cap">Overview of the full multimodal framework. LGE image, ECG median waveform, and AHA-17 anatomical prior are all fused through TAFF to produce the scar segmentation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §5 RESULTS -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">Quantitative results</p>
+    <h2 class="s-title rev">37% better. On real patients.</h2>
+
+    <div class="result-head rev d1">
+      <div>
+        <div class="result-num">+37.6%</div>
+        <div class="result-unit">Dice improvement over image-only baseline</div>
+      </div>
+      <p class="result-copy">The model improves Dice from <strong>0.6149 to 0.8463</strong> over nnU-Net, a <strong>+37.6% relative gain</strong> in scar segmentation accuracy. Scar volume error drops from 4.43 ml to <strong>1.97 ml</strong>, a 55% reduction. Every improvement is statistically significant (paired t-test, p &lt; 0.001).</p>
+    </div>
+
+    <div class="fig-slot rev d2" style="max-width:520px;margin:var(--s3) auto;border:none;background:transparent" data-img="images/sb_results.png" data-alt="Segmentation performance bar chart">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_results.png</span>
+        <p class="fig-src">Export from Slide 33 — "Segmentation Performance" — final build showing LGE-only vs LGE+ECG+AHA-17</p>
+        <p class="fig-desc">Bar chart comparing LGE-only baseline vs the full multimodal pipeline, showing improvements of 23%, 20%, and 18% across the reported segmentation metrics.</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap rev d2" style="margin-top:var(--s4)">
+      <table class="res">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Dice ↑</th>
+            <th>Precision ↑</th>
+            <th>Sensitivity ↑</th>
+            <th>Vol. Diff ↓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LGE only (nnU-Net baseline)</td>
+            <td class="num">0.6149</td>
+            <td class="num">0.7315</td>
+            <td class="num">0.7071</td>
+            <td class="num">4.43 ml</td>
+          </tr>
+          <tr class="ours">
+            <td><strong>LGE + ECG + AHA-17 (TAFF, ours)</strong></td>
+            <td class="best">0.8463</td>
+            <td class="best">0.9115</td>
+            <td class="best">0.9043</td>
+            <td class="best">1.97 ml</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note rev d2">Dice ↑ higher is better. Vol. Diff ↓ lower is better. All improvements over baseline are statistically significant (paired t-test, p &lt; 0.001). Evaluated on Nottingham Multimodal Dataset (103 subjects, 7:1:2 split).</p>
+  </div>
+</section>
+
+<!-- §6 ABLATION + TIME CONDITIONING -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">Detailed results</p>
+    <h2 class="s-title rev">Which component contributes what, and does timing actually matter?</h2>
+    <div class="prose rev d1">
+      <p>The ablation study isolates how much each component actually contributes. Removing time conditioning, removing the ECG entirely, or removing the anatomical prior each causes measurable drops in performance. Every combination still beats the baseline, but the full model with all three components consistently achieves the best results. Time conditioning turns out to be particularly important: without it, performance is unstable and degrades for patients with large ECG-MRI acquisition gaps.</p>
+    </div>
+
+    <div class="tbl-wrap rev d2">
+      <table class="res">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Input</th>
+            <th style="text-align:center">w/ AP</th>
+            <th>Dice ↑</th>
+            <th>Precision ↑</th>
+            <th>Sensitivity ↑</th>
+            <th>Vol. Diff. ↓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Baseline (unimodal)</td>
+            <td class="num">LGE</td>
+            <td class="ap-no">✕</td>
+            <td class="num">0.6149</td>
+            <td class="num">0.7315</td>
+            <td class="num">0.7072</td>
+            <td class="num">4.436 ml</td>
+          </tr>
+          <tr class="ours">
+            <td><strong>Ours (multimodal)</strong></td>
+            <td class="num"><strong>LGE + ECG</strong></td>
+            <td class="ap-yes">✓</td>
+            <td class="best">0.8463</td>
+            <td class="best">0.9115</td>
+            <td class="best">0.9043</td>
+            <td class="best">1.971 ml</td>
+          </tr>
+          <tr class="abl-divider">
+            <td colspan="7">Ablation study · AP = Anatomical Prior</td>
+          </tr>
+          <tr>
+            <td>w/o time conditioning</td>
+            <td class="num">LGE + ECG</td>
+            <td class="ap-no">✕</td>
+            <td class="num">0.5916</td>
+            <td class="num">0.7351</td>
+            <td class="num">0.6398</td>
+            <td class="num">6.256 ml</td>
+          </tr>
+          <tr>
+            <td>w/o time conditioning</td>
+            <td class="num">LGE + ECG</td>
+            <td class="ap-yes">✓</td>
+            <td class="num">0.8234</td>
+            <td class="num">0.8234</td>
+            <td class="num">0.8900</td>
+            <td class="num">2.039 ml</td>
+          </tr>
+          <tr>
+            <td>w/o ECG</td>
+            <td class="num">LGE</td>
+            <td class="ap-yes">✓</td>
+            <td class="num">0.8204</td>
+            <td class="num">0.9090</td>
+            <td class="num">0.8408</td>
+            <td class="num">2.196 ml</td>
+          </tr>
+          <tr class="ours">
+            <td><strong>Full model (w/ time conditioning)</strong></td>
+            <td class="num"><strong>LGE + ECG</strong></td>
+            <td class="ap-yes">✓</td>
+            <td class="best">0.8463</td>
+            <td class="best">0.9115</td>
+            <td class="best">0.9043</td>
+            <td class="best">1.971 ml</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note rev d2">AP = Anatomical Prior. Bold = best. All improvements over baseline are statistically significant (p &lt; 0.001). Adding time conditioning on top of ECG + AP achieves the best results across every metric.</p>
+
+    <div class="fig-slot rev d2" style="max-width:720px;margin:var(--s4) auto" data-img="images/sb_timing.png" data-alt="Time conditioning effect by acquisition gap">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_timing.png</span>
+        <p class="fig-src">Export from Slide 35 — "Effect of Time Conditioning" — Dice by acquisition gap bin</p>
+        <p class="fig-desc">Distribution of Dice scores across ECG-MRI time-interval bins, comparing models with and without time conditioning. TAFF remains stable; the no-conditioning model degrades with larger gaps.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d2">Without time conditioning, performance drops for patients with large ECG-MRI acquisition gaps. TAFF's gating mechanism keeps it stable across all gap sizes.</p>
+  </div>
+</section>
+
+<!-- §7 QUALITATIVE RESULTS -->
+<section class="section ink">
+  <div class="inner">
+    <p class="s-eye rev">Qualitative results</p>
+    <h2 class="s-title rev">Seeing the difference the ECG makes</h2>
+    <div class="prose rev d1">
+      <p>The most convincing evidence is visual. The cases where the image-only model misses or mislocates scar are precisely the cases where the ECG signal provides the spatial prior that corrects the prediction. The temporal attention maps confirm that the model learns to attend to the right ECG leads, the ones that correspond to the actual scar territory.</p>
+    </div>
+
+    <div class="fig-slot rev d2" style="max-width:860px;margin:var(--s4) auto" data-img="images/sb_qualitative.png" data-alt="Qualitative scar segmentation results with temporal attention" data-whitebg="true">
+      <div class="fig-inner">
+        <span class="fig-file">images/sb_qualitative.png</span>
+        <p class="fig-src">Export from Slide 36 — full panel: GT / Baseline / Multimodal / Temporal Attention / Scar Volume charts</p>
+        <p class="fig-desc">(a) Ground truth, (b) baseline LGE-only, (c) multimodal TAFF, (d) temporal attention maps, (e–g) scar volume AHA-17 charts.</p>
+      </div>
+    </div>
+    <p class="fig-cap rev d2">Ground truth vs LGE-only vs multimodal (TAFF). The multimodal model correctly localises scar in cases the image-only baseline misses. The temporal attention maps show the model has learned to attend to the clinically correct ECG leads.</p>
+
+    <!-- More cases carousel -->
+    <p class="s-eye rev" style="margin-top:var(--s6)">More cases</p>
+    <h3 class="rev" style="font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;color:var(--white);letter-spacing:-.03em;line-height:1.1;margin-bottom:var(--s4)">Representative cases across <em style="font-style:normal;color:var(--accent)">all</em> outcome categories</h3>
+
+    <div class="carousel rev d2" id="qualCarousel">
+      <div class="carousel-cat cat-good" id="carouselCat">✦ Clear Improvement · Case 1 of 3</div>
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carouselTrack"></div>
+      </div>
+      <p class="carousel-caption" id="carouselCaption"></p>
+      <div class="carousel-foot">
+        <button class="carousel-btn" id="prevBtn">←</button>
+        <span class="carousel-counter" id="carouselCounter">1 / 6</span>
+        <button class="carousel-btn" id="nextBtn">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §8 CONTRIBUTIONS -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">Key contributions</p>
+    <h2 class="s-title rev">Three things this work adds to the field</h2>
+    <div class="contrib-list rev d1">
+      <div class="contrib">
+        <div class="contrib-n"><span class="contrib-ico">🫀</span>01</div>
+        <div class="contrib-body">
+          <p class="contrib-title">First to bring physiology into imaging by using ECG to guide LGE-CMR scar segmentation</p>
+          <p class="contrib-desc">Prior work treats scar segmentation as a purely visual task. This paper is the <strong>first to integrate 12-lead ECG electrophysiological information</strong> as a conditioning signal for LGE-based scar segmentation, establishing a new direction for physiologically grounded cardiac AI. The approach mirrors how cardiologists actually reason: image and signal together, not image alone.</p>
+        </div>
+      </div>
+      <div class="contrib">
+        <div class="contrib-n"><span class="contrib-ico">🕐</span>02</div>
+        <div class="contrib-body">
+          <p class="contrib-title">TAFF: temporal fusion done right, not assumed away</p>
+          <p class="contrib-desc">Most multimodal medical imaging methods ignore the time gap between modality acquisitions. <span class="hl">TAFF explicitly models this gap</span> via a Gating MLP and Temporal FiLM conditioning, dynamically adjusting ECG feature weight based on how recent the ECG is relative to the MRI. The time-conditioning ablation confirms this is not cosmetic. <span class="hl">It is what keeps performance stable across patients with large acquisition gaps.</span></p>
+        </div>
+      </div>
+      <div class="contrib">
+        <div class="contrib-n"><span class="contrib-ico">🗺️</span>03</div>
+        <div class="contrib-body">
+          <p class="contrib-title">AHA-17 anatomical prior ensures physiologically consistent predictions</p>
+          <p class="contrib-desc">The AHA-17 atlas constrains where in the left ventricle each ECG lead is permitted to localise scar, ensuring the spatial prior is <strong>anatomically honest</strong> rather than statistically learned. Combined with TAFF, this means the model does not just perform better on average. It performs more precisely in the specific cardiac territories the ECG implicates, improving both Dice and regional scar volume accuracy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACKNOWLEDGEMENTS -->
+<section class="section off">
+  <div class="inner">
+    <p class="s-eye rev">Acknowledgements</p>
+    <div class="ack-row rev d1">
+      <div class="ack-logo" title="The Royal Society">
+        <img src="images/logo_royal_society.png" alt="The Royal Society"
+          onerror="this.parentNode.innerHTML='<span class=\'ack-logo-name\'>The Royal Society</span>'"/>
+      </div>
+
+      <div class="ack-divider"></div>
+
+      <div class="ack-logo" title="Nottingham University Hospitals NHS Trust">
+        <img src="images/logo_nhs.png" alt="NHS Nottingham University Hospitals"
+          onerror="this.parentNode.innerHTML='<span class=\'ack-logo-name\'>NHS · Nottingham UH</span>'"/>
+      </div>
+      <div class="ack-logo" title="University of Oxford" style="min-width:140px">
+        <img src="images/logo_oxford.png" alt="University of Oxford"
+          onerror="this.parentNode.innerHTML='<span class=\'ack-logo-name\'>University of Oxford</span>'"/>
+      </div>
+      <div class="ack-logo" title="The University of Nottingham">
+        <img src="images/logo_nottingham.png" alt="The University of Nottingham"
+          onerror="this.parentNode.innerHTML='<span class=\'ack-logo-name\'>University of Nottingham</span>'"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIBTEX -->
+<section class="section">
+  <div class="inner">
+    <p class="s-eye rev">Cite</p>
+    <h2 class="s-title rev">BibTeX</h2>
+    <div class="bibtex rev d1">
+      <button class="bib-copy" id="bibCopy">Copy</button>
+      <pre id="bibText">@inproceedings{ramzan2026seeing,
+  title     = {Seeing Beyond the Image: ECG and Anatomical Knowledge-Guided
+               Myocardial Scar Segmentation from Late Gadolinium-Enhanced Images},
+  author    = {Ramzan, Farheen and Kiberu, Yusuf and Jathanna, Nikesh
+               and Jabrane, Meryem and Grau, Vicente and Jamil-Copley, Shahnaz
+               and Clayton, Richard H. and Chen, Chen},
+  booktitle = {IEEE International Symposium on Biomedical Imaging (ISBI)},
+  year      = {2026},
+  note      = {Oral presentation}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <a href="../index.html">← farheenramzan.com</a>
+  <p>Seeing Beyond the Image · IEEE ISBI 2026 · Oral · Farheen Ramzan · June 2026</p>
+</footer>
+
+<script>
+// Scroll reveal
+const _io = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }),
+  { threshold: 0.07 }
+);
+document.querySelectorAll('.rev').forEach(el => _io.observe(el));
+
+// BibTeX copy
+document.getElementById('bibCopy').addEventListener('click', function () {
+  navigator.clipboard.writeText(document.getElementById('bibText').innerText)
+    .then(() => { this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 1600); });
+});
+
+// Smart image loader
+document.querySelectorAll('.fig-slot[data-img]').forEach(slot => {
+  const src = slot.dataset.img;
+  const alt = slot.dataset.alt || '';
+  const probe = new Image();
+  probe.onload = () => {
+    const img = document.createElement('img');
+    img.src = src; img.alt = alt;
+    const fixedH = slot.dataset.fixedheight;
+    img.style.cssText = fixedH
+      ? `width:100%;display:block;height:${fixedH}px;object-fit:contain`
+      : 'width:100%;display:block';
+    const savedMaxWidth = slot.style.maxWidth;
+    const savedMargin   = slot.style.margin || 'var(--s3) 0';
+    const inDark = slot.closest('.section.ink');
+    const whiteBg = slot.dataset.whitebg === 'true';
+    if (whiteBg) {
+      slot.style.cssText = `background:#FFFFFF;border:1px solid var(--line);padding:var(--s2);margin:${savedMargin}`;
+    } else if (inDark) {
+      slot.style.cssText = `background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:12px;margin:${savedMargin}`;
+    } else {
+      slot.style.cssText = `border:1px solid var(--line);background:var(--white);margin:${savedMargin}`;
+    }
+    if (savedMaxWidth) slot.style.maxWidth = savedMaxWidth;
+    slot.innerHTML = ''; slot.appendChild(img);
+  };
+  probe.src = src;
+});
+// Qualitative results carousel
+(function () {
+  const cases = [
+    { img: 'images/sb_qual_case_1.png', label: '✦ Clear Improvement · Case 1 of 3', type: 'good', alt: 'Qualitative case 1',
+      caption: 'Representative success case showing improved scar segmentation with TAFF. AHA-17 bull\'s-eye plots illustrate reduced regional scar volume error in the multimodal prediction compared to the baseline.' },
+    { img: 'images/sb_qual_case_2.png', label: '✦ Clear Improvement · Case 2 of 3', type: 'good', alt: 'Qualitative case 2',
+      caption: 'Multimodal fusion refines fragmented baseline predictions into a more coherent segmentation. Anatomical priors constrain the output to physiologically plausible regions of the left ventricle.' },
+    { img: 'images/sb_qual_case_3.png', label: '✦ Clear Improvement · Case 3 of 3', type: 'good', alt: 'Qualitative case 3',
+      caption: 'ECG-guided fusion improves boundary consistency and regional scar volume estimation. The multimodal prediction aligns more closely with ground truth across apical AHA segments.' },
+    { img: 'images/sb_qual_case_4.png', label: '◐ Moderate Improvement · Case 1 of 1', type: 'mod',  alt: 'Qualitative case 4',
+      caption: 'TAFF corrects under-segmentation seen in the image-only baseline, particularly in mid-ventricular segments. ECG attention highlights the clinically relevant leads associated with the affected myocardial regions.' },
+    { img: 'images/sb_qual_case_5.png', label: '▲ Challenging Case · Case 1 of 2',   type: 'fail', alt: 'Qualitative case 5',
+      caption: 'Reduced scar volume error in selected AHA segments, but gains are modest. ECG attention is weaker in this case yet still contributes to stabilising segmentation against image ambiguity.' },
+    { img: 'images/sb_qual_case_6.png', label: '▲ Challenging Case · Case 2 of 2',   type: 'fail', alt: 'Qualitative case 6',
+      caption: 'Failure case showing limitations when both LGE contrast and ECG signals are ambiguous. Regional errors persist, though the anatomical prior prevents anatomically implausible predictions from forming.' },
+  ];
+
+  const track   = document.getElementById('carouselTrack');
+  const counter = document.getElementById('carouselCounter');
+  const catEl   = document.getElementById('carouselCat');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  let current   = 0;
+
+  // Build slides
+  cases.forEach((c, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    slide.innerHTML = `
+      <div class="slide-ph">
+        <span class="slide-ph-file">${c.img}</span>
+        <p class="slide-ph-note">Export from your presentation slides — drop ${c.img} into projects/images/</p>
+      </div>`;
+    // Try loading the image
+    const probe = new Image();
+    probe.onload = () => {
+      const img = document.createElement('img');
+      img.src = c.img; img.alt = c.alt;
+      img.style.cssText = 'width:100%;display:block';
+      slide.innerHTML = '';
+      slide.appendChild(img);
+    };
+    probe.src = c.img;
+    track.appendChild(slide);
+  });
+
+  const captionEl = document.getElementById('carouselCaption');
+
+  function goTo(n) {
+    current = Math.max(0, Math.min(n, cases.length - 1));
+    track.style.transform = `translateX(-${current * 100}%)`;
+    counter.textContent   = `${current + 1} / ${cases.length}`;
+    const c = cases[current];
+    catEl.textContent      = c.label;
+    catEl.className        = `carousel-cat cat-${c.type}`;
+    captionEl.textContent  = c.caption;
+    prevBtn.disabled       = current === 0;
+    nextBtn.disabled       = current === cases.length - 1;
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  goTo(0);
+})();
+</script>
+</body>
+</html>
